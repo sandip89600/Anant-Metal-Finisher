@@ -1,0 +1,7 @@
+# robots.txt for Anant Metal Finishers (AMP)
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /api/
+
+Sitemap: https://anantmetalfinishers.com/sitemap.xml

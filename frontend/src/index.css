@@ -1,0 +1,49 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+
+  /* Accessible focus styles */
+  :focus-visible {
+    outline: 2px solid #0284c7;
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  .btn-primary {
+    @apply inline-flex items-center justify-center font-medium px-5 py-2.5 rounded-lg bg-blue-700 text-white shadow-sm hover:bg-blue-800 transition-all duration-200 active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center font-medium px-5 py-2.5 rounded-lg bg-slate-100 text-slate-800 hover:bg-slate-200 border border-slate-200 transition-all duration-200 active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed;
+  }
+
+  .btn-accent {
+    @apply inline-flex items-center justify-center font-semibold px-6 py-3 rounded-lg bg-amber-600 text-white shadow-md hover:bg-amber-700 transition-all duration-200 active:scale-[0.99] disabled:opacity-60 disabled:cursor-not-allowed;
+  }
+
+  .card-industrial {
+    @apply bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-all duration-200;
+  }
+
+  .badge-verified {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200;
+  }
+
+  .badge-unverified {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700 border border-amber-200;
+  }
+}
+
+/* Print styling */
+@media print {
+  header, footer, nav, .no-print {
+    display: none !important;
+  }
+}
