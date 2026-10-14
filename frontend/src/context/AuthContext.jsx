@@ -24,6 +24,7 @@ export const AuthProvider = ({ children }) => {
       }
     } catch (err) {
       setUser(null);
+      sessionStorage.removeItem('amf_auth_token');
       sessionStorage.removeItem('amp_auth_token');
     } finally {
       setLoading(false);
@@ -37,7 +38,7 @@ export const AuthProvider = ({ children }) => {
   const login = async (credentials) => {
     const response = await authApi.login(credentials);
     if (response?.token) {
-      sessionStorage.setItem('amp_auth_token', response.token);
+      sessionStorage.setItem('amf_auth_token', response.token);
     }
     if (response?.user) {
       setUser(response.user);
@@ -51,6 +52,7 @@ export const AuthProvider = ({ children }) => {
     } catch (err) {
       console.warn('Logout API call failed, clearing local state.');
     } finally {
+      sessionStorage.removeItem('amf_auth_token');
       sessionStorage.removeItem('amp_auth_token');
       setUser(null);
     }

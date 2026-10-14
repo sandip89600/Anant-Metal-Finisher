@@ -80,11 +80,11 @@ const AdminDashboardPage = () => {
 
       {/* Metric Cards Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-        {/* Card 1: New Enquiries */}
+        {/* Card 1: Contact Messages */}
         <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800 shadow-sm space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-sky-400 uppercase tracking-wider">
-              New Enquiries
+              Contact Messages
             </span>
             <div className="w-8 h-8 rounded-lg bg-sky-950/60 text-sky-400 border border-sky-800 flex items-center justify-center">
               <Mail className="w-4 h-4" />
@@ -92,21 +92,24 @@ const AdminDashboardPage = () => {
           </div>
           <div className="flex items-baseline gap-2">
             <span className="text-3xl font-extrabold text-white">
-              {enquiries.new}
+              {enquiries.total || 0}
             </span>
-            <span className="text-xs text-slate-400">awaiting review</span>
+            <span className="text-xs text-slate-400">total messages</span>
           </div>
-          <div className="text-[11px] text-slate-500 pt-1 border-t border-slate-900 flex justify-between">
-            <span>In Progress: {enquiries.inProgress}</span>
-            <span>Total: {enquiries.total}</span>
+          <div className="text-[11px] text-slate-400 pt-1 border-t border-slate-900 flex justify-between">
+            <span className="text-amber-400 font-medium">Unread: {enquiries.unread || enquiries.new || 0}</span>
+            <span className="text-emerald-400 font-medium">Read: {enquiries.read || 0}</span>
+            <Link to="/admin/messages" className="text-sky-400 hover:underline">
+              View →
+            </Link>
           </div>
         </div>
 
-        {/* Card 2: Verified Services */}
+        {/* Card 2: Verified Capabilities */}
         <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800 shadow-sm space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-emerald-400 uppercase tracking-wider">
-              Verified Services
+              Capabilities
             </span>
             <div className="w-8 h-8 rounded-lg bg-emerald-950/60 text-emerald-400 border border-emerald-800 flex items-center justify-center">
               <ShieldCheck className="w-4 h-4" />
@@ -116,21 +119,45 @@ const AdminDashboardPage = () => {
             <span className="text-3xl font-extrabold text-white">
               {products.published}
             </span>
-            <span className="text-xs text-slate-400">published live</span>
+            <span className="text-xs text-slate-400">verified &amp; live</span>
           </div>
           <div className="text-[11px] text-slate-500 pt-1 border-t border-slate-900 flex justify-between">
-            <span>Draft/Unverified: {products.draft}</span>
-            <Link to="/admin/products" className="text-sky-400 hover:underline">
+            <span>Draft / Review: {products.draft}</span>
+            <Link to="/admin/capabilities" className="text-sky-400 hover:underline">
               Manage →
             </Link>
           </div>
         </div>
 
-        {/* Card 3: Published Blog Guides */}
+        {/* Card 3: Photo Gallery & Portfolio */}
+        <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800 shadow-sm space-y-3">
+          <div className="flex items-center justify-between">
+            <span className="text-xs font-semibold text-purple-400 uppercase tracking-wider">
+              Photo Gallery
+            </span>
+            <div className="w-8 h-8 rounded-lg bg-purple-950/60 text-purple-400 border border-purple-800 flex items-center justify-center">
+              <Layers className="w-4 h-4" />
+            </div>
+          </div>
+          <div className="flex items-baseline gap-2">
+            <span className="text-3xl font-extrabold text-white">
+              {metrics.gallery?.total || 0}
+            </span>
+            <span className="text-xs text-slate-400">photographs</span>
+          </div>
+          <div className="text-[11px] text-slate-500 pt-1 border-t border-slate-900 flex justify-between">
+            <span>Featured: {metrics.gallery?.featured || 0}</span>
+            <Link to="/admin/gallery" className="text-sky-400 hover:underline">
+              Gallery →
+            </Link>
+          </div>
+        </div>
+
+        {/* Card 4: Published Articles */}
         <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800 shadow-sm space-y-3">
           <div className="flex items-center justify-between">
             <span className="text-xs font-semibold text-blue-400 uppercase tracking-wider">
-              Educational Guides
+              Company Articles
             </span>
             <div className="w-8 h-8 rounded-lg bg-blue-950/60 text-blue-400 border border-blue-800 flex items-center justify-center">
               <FileText className="w-4 h-4" />
@@ -140,7 +167,7 @@ const AdminDashboardPage = () => {
             <span className="text-3xl font-extrabold text-white">
               {blogs.published}
             </span>
-            <span className="text-xs text-slate-400">articles online</span>
+            <span className="text-xs text-slate-400">published</span>
           </div>
           <div className="text-[11px] text-slate-500 pt-1 border-t border-slate-900 flex justify-between">
             <span>Drafts: {blogs.draft}</span>
@@ -149,64 +176,40 @@ const AdminDashboardPage = () => {
             </Link>
           </div>
         </div>
-
-        {/* Card 4: Total Submissions */}
-        <div className="p-5 rounded-2xl bg-slate-950 border border-slate-800 shadow-sm space-y-3">
-          <div className="flex items-center justify-between">
-            <span className="text-xs font-semibold text-purple-400 uppercase tracking-wider">
-              Total Enquiries
-            </span>
-            <div className="w-8 h-8 rounded-lg bg-purple-950/60 text-purple-400 border border-purple-800 flex items-center justify-center">
-              <TrendingUp className="w-4 h-4" />
-            </div>
-          </div>
-          <div className="flex items-baseline gap-2">
-            <span className="text-3xl font-extrabold text-white">
-              {enquiries.total}
-            </span>
-            <span className="text-xs text-slate-400">all-time records</span>
-          </div>
-          <div className="text-[11px] text-slate-500 pt-1 border-t border-slate-900 flex justify-between">
-            <span>Completed: {enquiries.completed}</span>
-            <Link to="/admin/enquiries" className="text-sky-400 hover:underline">
-              View All →
-            </Link>
-          </div>
-        </div>
       </div>
 
       {/* Quick Action Shortcuts */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
         <Link
-          to="/admin/products"
+          to="/admin/capabilities"
           className="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 hover:border-slate-700 hover:bg-slate-950 text-xs text-slate-200 transition-colors flex items-center gap-2.5 font-medium"
         >
           <PlusCircle className="w-4 h-4 text-emerald-400 shrink-0" />
-          <span>Manage Services</span>
+          <span>Manage Capabilities</span>
         </Link>
 
         <Link
-          to="/admin/blog"
+          to="/admin/gallery"
           className="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 hover:border-slate-700 hover:bg-slate-950 text-xs text-slate-200 transition-colors flex items-center gap-2.5 font-medium"
         >
-          <FileText className="w-4 h-4 text-blue-400 shrink-0" />
-          <span>Create Article</span>
+          <Layers className="w-4 h-4 text-purple-400 shrink-0" />
+          <span>Photo Gallery</span>
         </Link>
 
         <Link
-          to="/admin/enquiries"
+          to="/admin/messages"
           className="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 hover:border-slate-700 hover:bg-slate-950 text-xs text-slate-200 transition-colors flex items-center gap-2.5 font-medium"
         >
           <Mail className="w-4 h-4 text-sky-400 shrink-0" />
-          <span>Review Enquiries</span>
+          <span>Contact Messages</span>
         </Link>
 
         <Link
           to="/admin/settings"
           className="p-3.5 rounded-xl bg-slate-950/70 border border-slate-800 hover:border-slate-700 hover:bg-slate-950 text-xs text-slate-200 transition-colors flex items-center gap-2.5 font-medium"
         >
-          <Layers className="w-4 h-4 text-purple-400 shrink-0" />
-          <span>Edit Company Info</span>
+          <ShieldCheck className="w-4 h-4 text-amber-400 shrink-0" />
+          <span>Company Settings</span>
         </Link>
       </div>
 

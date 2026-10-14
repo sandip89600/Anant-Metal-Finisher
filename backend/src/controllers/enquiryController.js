@@ -51,7 +51,7 @@ const submitQuote = async (req, res, next) => {
 // ADMIN: Get all enquiries with filtering and pagination
 const adminGetEnquiries = async (req, res, next) => {
   try {
-    const { status, type, search, page = 1, limit = 20 } = req.query;
+    const { status, type, read, search, page = 1, limit = 20 } = req.query;
 
     const query = {};
 
@@ -61,6 +61,12 @@ const adminGetEnquiries = async (req, res, next) => {
 
     if (type && type !== 'all') {
       query.enquiryType = type;
+    }
+
+    if (read === 'true') {
+      query.isRead = true;
+    } else if (read === 'false') {
+      query.isRead = false;
     }
 
     if (search && search.trim()) {
@@ -78,7 +84,7 @@ const adminGetEnquiries = async (req, res, next) => {
     const limitNum = Math.min(100, Math.max(1, parseInt(limit, 10)));
     const skip = (pageNum - 1) * limitNum;
 
-    const [items, total, countByStatus] = await Promise.all([
+    const [items, total, countByStatus, unreadTotal, readTotal] = await Promise.all([
       Enquiry.find(query)
         .sort({ createdAt: -1 })
         .skip(skip)
@@ -87,7 +93,9 @@ const adminGetEnquiries = async (req, res, next) => {
       Enquiry.countDocuments(query),
       Enquiry.aggregate([
         { $group: { _id: '$status', count: { $sum: 1 } } }
-      ])
+      ]),
+      Enquiry.countDocuments({ isRead: false }),
+      Enquiry.countDocuments({ isRead: true })
     ]);
 
     const statusCounts = {
@@ -95,7 +103,9 @@ const adminGetEnquiries = async (req, res, next) => {
       new: 0,
       in_progress: 0,
       completed: 0,
-      spam: 0
+      spam: 0,
+      unread: unreadTotal,
+      read: readTotal
     };
 
     countByStatus.forEach((item) => {
@@ -108,6 +118,8 @@ const adminGetEnquiries = async (req, res, next) => {
       success: true,
       data: items,
       statusCounts,
+      unreadTotal,
+      readTotal,
       pagination: {
         page: pageNum,
         limit: limitNum,
@@ -263,6 +275,57 @@ const adminExportCsv = async (req, res, next) => {
   }
 };
 
+// ADMIN: Toggle read/unread status
+const adminToggleRead = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const { isRead } = req.body;
+
+    const enquiry = await Enquiry.findById(id);
+    if (!enquiry) {
+      return res.status(404).json({
+        success: false,
+        message: 'Enquiry not found'
+      });
+    }
+
+    enquiry.isRead = typeof isRead === 'boolean' ? isRead : !enquiry.isRead;
+    await enquiry.save();
+
+    res.status(200).json({
+      success: true,
+      message: `Enquiry marked as ${enquiry.isRead ? 'read' : 'unread'}`,
+      data: enquiry
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
+// ADMIN: Delete enquiry message
+const adminDeleteEnquiry = async (req, res, next) => {
+  try {
+    const { id } = req.params;
+    const enquiry = await Enquiry.findByIdAndDelete(id);
+
+    if (!enquiry) {
+      return res.status(404).json({
+        success: false,
+        message: 'Enquiry not found'
+      });
+    }
+
+    logger.info(`Enquiry deleted: ${enquiry.referenceNumber} (ID: ${id})`);
+
+    res.status(200).json({
+      success: true,
+      message: 'Enquiry deleted successfully'
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+
 module.exports = {
   submitContact,
   submitQuote,
@@ -270,5 +333,7 @@ module.exports = {
   adminGetEnquiryById,
   adminUpdateStatus,
   adminAddInternalNote,
-  adminExportCsv
+  adminExportCsv,
+  adminToggleRead,
+  adminDeleteEnquiry
 };

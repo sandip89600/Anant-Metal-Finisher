@@ -50,7 +50,7 @@ const ContactPage = () => {
       if (res?.success) {
         setSuccessData({
           referenceNumber: res.referenceNumber,
-          message: res.message
+          message: 'Thank you. Your message has been received.'
         });
         e.currentTarget.reset();
       }
@@ -64,8 +64,8 @@ const ContactPage = () => {
   return (
     <>
       <SEO
-        title="Contact Us | Anant Metal Finishers (AMP) Nashik"
-        description="Get in touch with Anant Metal Finishers (AMP) at G-8, MIDC Ambad, Nashik, Maharashtra – 422010. Submit an enquiry for electroplating job work."
+        title="Contact Us | Anant Metal Finishers (AMF) Nashik"
+        description="Get in touch with Anant Metal Finishers (AMF) at G-8, MIDC Ambad, Nashik, Maharashtra – 422010. Submit an enquiry for electroplating job work."
       />
 
       {/* Header Banner */}
@@ -106,7 +106,7 @@ const ContactPage = () => {
                     Verified Location
                   </span>
                   <h2 className="text-xl font-bold text-slate-900 mt-2">
-                    Anant Metal Finishers (AMP)
+                    Anant Metal Finishers (AMF)
                   </h2>
                   <p className="text-xs text-slate-500 mt-1">
                     Industrial metal finishing and electroplating job work facility.
@@ -212,8 +212,8 @@ const ContactPage = () => {
                         <CheckCircle2 className="w-6 h-6" />
                       </div>
                       <div>
-                        <h3 className="font-bold text-emerald-950 text-base">Enquiry Received Successfully</h3>
-                        <p className="text-xs text-emerald-700">{successData.message}</p>
+                        <h3 className="font-bold text-emerald-950 text-base">Thank you. Your message has been received.</h3>
+                        <p className="text-xs text-emerald-700">Our operations team will review your enquiry.</p>
                       </div>
                     </div>
 

@@ -1,4 +1,4 @@
-# Anant Metal Finishers (AMP) - Pre-Launch Verification Checklist
+# Anant Metal Finishers (AMF) - Pre-Launch Verification Checklist
 
 This document details the checklist of real business information that the business management of **Anant Metal Finishers** must review, verify, and input via the Admin Dashboard (`/admin/settings`) prior to public marketing or production launch.
 
@@ -9,7 +9,7 @@ In adherence to strict factual accuracy standards, no unverified contact details
 ## 1. Verified Core Information (Pre-Configured)
 The following details are confirmed and initialized in the database:
 - [x] **Company Name:** Anant Metal Finishers
-- [x] **Brand Abbreviation:** AMP
+- [x] **Brand Abbreviation:** AMF
 - [x] **Business Category:** Industrial metal finishing and electroplating job work
 - [x] **Workshop Address:** Plot G-8, MIDC Ambad, Nashik, Maharashtra, India – 422010
 - [x] **Initial Verified Capability:** Industrial Electroplating Job Work

@@ -6,7 +6,7 @@ const PrivacyPolicyPage = () => {
   return (
     <>
       <SEO
-        title="Privacy Policy | Anant Metal Finishers (AMP)"
+        title="Privacy Policy | Anant Metal Finishers (AMF)"
         description="Privacy policy and data handling practices for business enquiries at Anant Metal Finishers, MIDC Ambad, Nashik."
       />
 
@@ -14,7 +14,7 @@ const PrivacyPolicyPage = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-bold tracking-tight">Privacy Policy</h1>
           <p className="text-slate-300 text-sm mt-2">
-            Last Updated: October 2026 • Anant Metal Finishers (AMP), MIDC Ambad, Nashik
+            Last Updated: October 2026 • Anant Metal Finishers (AMF), MIDC Ambad, Nashik
           </p>
         </div>
       </section>
@@ -31,7 +31,7 @@ const PrivacyPolicyPage = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 prose prose-slate text-sm sm:text-base leading-relaxed space-y-6 text-slate-700">
           <h2>1. Introduction</h2>
           <p>
-            Anant Metal Finishers ("AMP", "we", "our") respects your privacy. This policy outlines how we handle commercial business enquiries and quote requests submitted through our website.
+            Anant Metal Finishers ("AMF", "we", "our") respects your privacy. This policy outlines how we handle commercial business enquiries and quote requests submitted through our website.
           </p>
 
           <h2>2. Information We Collect</h2>

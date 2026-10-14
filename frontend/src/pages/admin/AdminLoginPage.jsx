@@ -39,7 +39,7 @@ const AdminLoginPage = () => {
           {/* Brand Header */}
           <div className="text-center space-y-3">
             <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-blue-700 via-blue-800 to-sky-500 flex items-center justify-center font-extrabold text-white text-2xl shadow-xl mx-auto border border-slate-700">
-              AMP
+              AMF
             </div>
             <div>
               <h1 className="text-2xl font-bold text-white tracking-tight">

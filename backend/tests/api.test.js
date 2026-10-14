@@ -43,7 +43,7 @@ describe('Anant Metal Finishers API Integration Tests', () => {
       expect(res.status).toBe(200);
       expect(res.body.status).toBe('healthy');
       expect(res.body.company).toBe('Anant Metal Finishers');
-      expect(res.body.brand).toBe('AMP');
+      expect(res.body.brand).toBe('AMF');
       expect(res.body.location).toContain('MIDC Ambad, Nashik');
     });
 
@@ -52,6 +52,7 @@ describe('Anant Metal Finishers API Integration Tests', () => {
       expect(res.status).toBe(200);
       expect(res.body.success).toBe(true);
       expect(res.body.data.companyName).toBe('Anant Metal Finishers');
+      expect(res.body.data.brandAbbreviation).toBe('AMF');
       expect(res.body.data.locationAddress.city).toBe('Nashik');
       expect(res.body.data.locationAddress.postalCode).toBe('422010');
       // Must not expose internal notification email or password
@@ -89,7 +90,7 @@ describe('Anant Metal Finishers API Integration Tests', () => {
       // Verify cookie header
       const cookies = res.headers['set-cookie'];
       expect(cookies).toBeDefined();
-      const hasTokenCookie = cookies.some(c => c.includes('amp_token='));
+      const hasTokenCookie = cookies.some(c => c.includes('amf_token=') || c.includes('amp_token='));
       expect(hasTokenCookie).toBe(true);
     });
 
@@ -167,7 +168,7 @@ describe('Anant Metal Finishers API Integration Tests', () => {
         });
       expect(res.status).toBe(201);
       expect(res.body.success).toBe(true);
-      expect(res.body.referenceNumber).toMatch(/^AMP-ENQ-2026-/);
+      expect(res.body.referenceNumber).toMatch(/^AMF-ENQ-2026-/);
     });
 
     it('POST /api/v1/quotes should record quote request with specifications', async () => {
@@ -191,7 +192,7 @@ describe('Anant Metal Finishers API Integration Tests', () => {
         });
       expect(res.status).toBe(201);
       expect(res.body.success).toBe(true);
-      expect(res.body.referenceNumber).toMatch(/^AMP-QUO-2026-/);
+      expect(res.body.referenceNumber).toMatch(/^AMF-QUO-2026-/);
     });
   });
 
@@ -248,6 +249,84 @@ describe('Anant Metal Finishers API Integration Tests', () => {
       expect(res.status).toBe(200);
       expect(res.headers['content-type']).toContain('text/csv');
       expect(res.text).toContain('Reference Number');
+    });
+
+    it('Admin can mark enquiry as read and delete an enquiry', async () => {
+      // 0. Fetch existing enquiry
+      const listRes = await request(app)
+        .get('/api/v1/admin/enquiries')
+        .set('Authorization', `Bearer ${adminToken}`);
+      expect(listRes.status).toBe(200);
+      expect(listRes.body.data.length).toBeGreaterThan(0);
+      const targetId = listRes.body.data[0]._id;
+
+      // 1. Mark as read
+      const readRes = await request(app)
+        .patch(`/api/v1/admin/enquiries/${targetId}/read`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({ isRead: true });
+      expect(readRes.status).toBe(200);
+      expect(readRes.body.data.isRead).toBe(true);
+
+      // 2. Delete enquiry
+      const deleteRes = await request(app)
+        .delete(`/api/v1/admin/enquiries/${targetId}`)
+        .set('Authorization', `Bearer ${adminToken}`);
+      expect(deleteRes.status).toBe(200);
+      expect(deleteRes.body.success).toBe(true);
+    });
+  });
+
+  describe('Gallery & Our Work Portfolio Showcase', () => {
+    let createdGalleryId;
+
+    it('GET /api/v1/gallery returns public gallery items', async () => {
+      const res = await request(app).get('/api/v1/gallery');
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+      expect(Array.isArray(res.body.data)).toBe(true);
+    });
+
+    it('GET /api/v1/gallery/work returns items for Our Work portfolio', async () => {
+      const res = await request(app).get('/api/v1/gallery/work');
+      expect(res.status).toBe(200);
+      expect(res.body.success).toBe(true);
+      expect(Array.isArray(res.body.data)).toBe(true);
+    });
+
+    it('Admin can create, update, and delete a gallery item', async () => {
+      // 1. Create
+      const createRes = await request(app)
+        .post('/api/v1/admin/gallery')
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({
+          title: 'Test Plating Tank Cell',
+          description: 'Immersion cell for test validation',
+          category: 'Factory',
+          imageUrl: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758',
+          isFeatured: true,
+          isWorkItem: true
+        });
+      expect(createRes.status).toBe(201);
+      createdGalleryId = createRes.body.data._id;
+      expect(createdGalleryId).toBeDefined();
+
+      // 2. Update
+      const updateRes = await request(app)
+        .patch(`/api/v1/admin/gallery/${createdGalleryId}`)
+        .set('Authorization', `Bearer ${adminToken}`)
+        .send({
+          title: 'Updated Plating Tank Cell'
+        });
+      expect(updateRes.status).toBe(200);
+      expect(updateRes.body.data.title).toBe('Updated Plating Tank Cell');
+
+      // 3. Delete
+      const deleteRes = await request(app)
+        .delete(`/api/v1/admin/gallery/${createdGalleryId}`)
+        .set('Authorization', `Bearer ${adminToken}`);
+      expect(deleteRes.status).toBe(200);
+      expect(deleteRes.body.success).toBe(true);
     });
   });
 });

@@ -7,6 +7,9 @@ import ProtectedRoute from './components/common/ProtectedRoute';
 // Public Pages
 import HomePage from './pages/HomePage';
 import AboutPage from './pages/AboutPage';
+import CapabilitiesPage from './pages/CapabilitiesPage';
+import OurWorkPage from './pages/OurWorkPage';
+import GalleryPage from './pages/GalleryPage';
 import ProductsPage from './pages/ProductsPage';
 import ProductDetailPage from './pages/ProductDetailPage';
 import BlogPage from './pages/BlogPage';
@@ -22,6 +25,7 @@ import AdminLoginPage from './pages/admin/AdminLoginPage';
 import AdminLayout from './pages/admin/AdminLayout';
 import AdminDashboardPage from './pages/admin/AdminDashboardPage';
 import AdminProductsPage from './pages/admin/AdminProductsPage';
+import AdminGalleryPage from './pages/admin/AdminGalleryPage';
 import AdminBlogPage from './pages/admin/AdminBlogPage';
 import AdminEnquiriesPage from './pages/admin/AdminEnquiriesPage';
 import AdminSettingsPage from './pages/admin/AdminSettingsPage';
@@ -69,10 +73,43 @@ function App() {
           }
         />
         <Route
+          path="/capabilities"
+          element={
+            <PublicLayout>
+              <CapabilitiesPage />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/capabilities/:slug"
+          element={
+            <PublicLayout>
+              <ProductDetailPage />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/our-work"
+          element={
+            <PublicLayout>
+              <OurWorkPage />
+            </PublicLayout>
+          }
+        />
+        <Route
+          path="/gallery"
+          element={
+            <PublicLayout>
+              <GalleryPage />
+            </PublicLayout>
+          }
+        />
+        {/* Compatibility routes for products */}
+        <Route
           path="/products"
           element={
             <PublicLayout>
-              <ProductsPage />
+              <CapabilitiesPage />
             </PublicLayout>
           }
         />
@@ -146,8 +183,11 @@ function App() {
           }
         >
           <Route index element={<AdminDashboardPage />} />
+          <Route path="capabilities" element={<AdminProductsPage />} />
           <Route path="products" element={<AdminProductsPage />} />
+          <Route path="gallery" element={<AdminGalleryPage />} />
           <Route path="blog" element={<AdminBlogPage />} />
+          <Route path="messages" element={<AdminEnquiriesPage />} />
           <Route path="enquiries" element={<AdminEnquiriesPage />} />
           <Route path="settings" element={<AdminSettingsPage />} />
         </Route>

@@ -24,7 +24,9 @@ const Header = () => {
   const navLinks = [
     { name: 'Home', path: '/' },
     { name: 'About', path: '/about' },
-    { name: 'Products & Services', path: '/products' },
+    { name: 'Capabilities', path: '/capabilities' },
+    { name: 'Our Work', path: '/our-work' },
+    { name: 'Gallery', path: '/gallery' },
     { name: 'Blog', path: '/blog' },
     { name: 'Contact', path: '/contact' }
   ];
@@ -41,7 +43,7 @@ const Header = () => {
             </span>
             <span className="inline-flex items-center gap-1 text-emerald-400 font-medium">
               <ShieldCheck className="w-3.5 h-3.5" />
-              <span>Industrial Job Work Facility</span>
+              <span>Industrial Metal Finishing &amp; Electroplating</span>
             </span>
           </div>
 
@@ -52,7 +54,7 @@ const Header = () => {
                 <span>{settings.phone}</span>
               </a>
             ) : (
-              <span className="text-slate-400">MIDC Ambad Industrial Zone</span>
+              <span className="text-slate-400">MIDC Ambad Industrial Area</span>
             )}
             <Link to="/admin/login" className="text-slate-400 hover:text-slate-200 transition-colors text-[11px]">
               Admin Portal
@@ -66,33 +68,41 @@ const Header = () => {
         className={`sticky top-0 z-50 w-full transition-all duration-300 ${
           isScrolled
             ? 'bg-white/95 backdrop-blur-md shadow-md py-3 border-b border-slate-200'
-            : 'bg-white py-4 border-b border-slate-100'
+            : 'bg-white py-3.5 border-b border-slate-100'
         }`}
       >
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
           {/* Logo Treatment */}
           <Link to="/" className="flex items-center gap-3 group focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-600 rounded-lg">
-            <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-slate-900 via-blue-900 to-sky-600 flex items-center justify-center text-white font-extrabold text-lg shadow-sm border border-slate-800 group-hover:scale-105 transition-transform">
-              AMP
-            </div>
+            {settings.logoUrl ? (
+              <img
+                src={settings.logoUrl}
+                alt={settings.companyName || 'Anant Metal Finishers'}
+                className="h-10 w-auto object-contain rounded"
+              />
+            ) : (
+              <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-slate-900 via-blue-900 to-sky-600 flex items-center justify-center text-white font-extrabold text-base shadow-sm border border-slate-800 group-hover:scale-105 transition-transform">
+                {settings.brandAbbreviation || 'AMF'}
+              </div>
+            )}
             <div className="flex flex-col">
-              <span className="font-bold text-slate-900 text-lg leading-tight tracking-tight">
-                Anant Metal Finishers
+              <span className="font-bold text-slate-900 text-base sm:text-lg leading-tight tracking-tight">
+                {settings.companyName || 'Anant Metal Finishers'}
               </span>
-              <span className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
-                Industrial Electroplating Job Work
+              <span className="text-[10px] sm:text-[11px] font-semibold text-slate-500 uppercase tracking-wider">
+                Industrial Metal Finishing &amp; Electroplating
               </span>
             </div>
           </Link>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center gap-1 lg:gap-2" aria-label="Main Navigation">
+          <nav className="hidden lg:flex items-center gap-1 xl:gap-2" aria-label="Main Navigation">
             {navLinks.map((link) => (
               <NavLink
                 key={link.path}
                 to={link.path}
                 className={({ isActive }) =>
-                  `px-3 py-2 rounded-lg text-sm font-medium transition-colors ${
+                  `px-3 py-2 rounded-lg text-xs xl:text-sm font-medium transition-colors ${
                     isActive
                       ? 'text-blue-700 bg-blue-50 font-semibold'
                       : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50'
@@ -104,13 +114,13 @@ const Header = () => {
             ))}
           </nav>
 
-          {/* Action CTAs */}
-          <div className="hidden md:flex items-center gap-3">
+          {/* Action CTA: Contact Us */}
+          <div className="hidden lg:flex items-center gap-3">
             <Link
-              to="/quote"
-              className="btn-primary text-sm shadow-sm gap-2 bg-blue-700 hover:bg-blue-800"
+              to="/contact"
+              className="btn-primary text-xs xl:text-sm shadow-sm gap-2 bg-blue-700 hover:bg-blue-800"
             >
-              <span>Request a Quote</span>
+              <span>Contact Us</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
@@ -119,7 +129,7 @@ const Header = () => {
           <button
             type="button"
             onClick={() => setIsOpen(!isOpen)}
-            className="md:hidden p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-600"
+            className="lg:hidden p-2 rounded-lg text-slate-600 hover:text-slate-900 hover:bg-slate-100 focus:outline-none focus:ring-2 focus:ring-blue-600"
             aria-expanded={isOpen}
             aria-label="Toggle navigation menu"
           >
@@ -129,14 +139,14 @@ const Header = () => {
 
         {/* Mobile Navigation Drawer */}
         {isOpen && (
-          <div className="md:hidden border-t border-slate-200 bg-white px-4 pt-3 pb-6 shadow-xl animate-fadeIn">
+          <div className="lg:hidden border-t border-slate-200 bg-white px-4 pt-3 pb-6 shadow-xl animate-fadeIn">
             <nav className="flex flex-col space-y-1">
               {navLinks.map((link) => (
                 <NavLink
                   key={link.path}
                   to={link.path}
                   className={({ isActive }) =>
-                    `px-3 py-2.5 rounded-lg text-base font-medium transition-colors ${
+                    `px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                       isActive
                         ? 'text-blue-700 bg-blue-50 font-semibold'
                         : 'text-slate-700 hover:text-slate-900 hover:bg-slate-50'
@@ -148,10 +158,10 @@ const Header = () => {
               ))}
               <div className="pt-3 border-t border-slate-100 mt-2 space-y-2">
                 <Link
-                  to="/quote"
+                  to="/contact"
                   className="w-full btn-primary text-sm justify-center gap-2"
                 >
-                  <span>Request a Quote</span>
+                  <span>Contact Us</span>
                   <ArrowRight className="w-4 h-4" />
                 </Link>
                 <div className="px-3 py-2 text-xs text-slate-500 text-center">

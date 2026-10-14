@@ -61,7 +61,7 @@ const SEO = ({
       '@context': 'https://schema.org',
       '@type': 'LocalBusiness',
       name: 'Anant Metal Finishers',
-      alternateName: 'AMP',
+      alternateName: 'AMF',
       description: 'Industrial electroplating and metal finishing job work facility.',
       url: 'https://anantmetalfinishers.com',
       address: {
@@ -81,10 +81,10 @@ const SEO = ({
 
     const activeSchema = structuredData || baseLocalBusinessSchema;
 
-    let scriptTag = document.getElementById('amp-structured-data');
+    let scriptTag = document.getElementById('amf-structured-data');
     if (!scriptTag) {
       scriptTag = document.createElement('script');
-      scriptTag.id = 'amp-structured-data';
+      scriptTag.id = 'amf-structured-data';
       scriptTag.type = 'application/ld+json';
       document.head.appendChild(scriptTag);
     }

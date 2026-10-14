@@ -6,7 +6,7 @@ const TermsPage = () => {
   return (
     <>
       <SEO
-        title="Terms &amp; Conditions | Anant Metal Finishers (AMP)"
+        title="Terms &amp; Conditions | Anant Metal Finishers (AMF)"
         description="Standard job-work evaluation and inquiry terms for Anant Metal Finishers, MIDC Ambad, Nashik."
       />
 
@@ -14,7 +14,7 @@ const TermsPage = () => {
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <h1 className="text-3xl font-bold tracking-tight">Terms &amp; Conditions</h1>
           <p className="text-slate-300 text-sm mt-2">
-            Last Updated: October 2026 • Anant Metal Finishers (AMP)
+            Last Updated: October 2026 • Anant Metal Finishers (AMF)
           </p>
         </div>
       </section>

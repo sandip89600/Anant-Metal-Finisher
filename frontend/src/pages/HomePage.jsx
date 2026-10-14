@@ -4,38 +4,51 @@ import {
   ArrowRight,
   ShieldCheck,
   CheckCircle2,
-  Clock,
   MapPin,
-  Layers,
-  FileText,
-  Sliders,
+  ExternalLink,
   ChevronRight,
-  Sparkles
+  Eye,
+  Factory,
+  Layers,
+  Phone,
+  Mail,
+  Clock
 } from 'lucide-react';
 import { useSettings } from '../context/SettingsContext';
-import { productsApi, blogApi } from '../services/api';
-import IndustrialHeroVisual from '../components/home/IndustrialHeroVisual';
+import { capabilitiesApi, galleryApi, blogApi } from '../services/api';
 import SEO from '../components/common/SEO';
-import { CardSkeleton } from '../components/common/LoadingSkeleton';
+import Lightbox from '../components/common/Lightbox';
 
 const HomePage = () => {
   const { settings } = useSettings();
-  const [featuredServices, setFeaturedServices] = useState([]);
-  const [latestBlogs, setLatestBlogs] = useState([]);
+  const [capabilities, setCapabilities] = useState([]);
+  const [workItems, setWorkItems] = useState([]);
+  const [galleryItems, setGalleryItems] = useState([]);
+  const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // Lightbox State
+  const [lightboxOpen, setLightboxOpen] = useState(false);
+  const [lightboxItems, setLightboxItems] = useState([]);
+  const [lightboxIndex, setLightboxIndex] = useState(0);
 
   useEffect(() => {
     const loadHomeData = async () => {
       try {
         setLoading(true);
-        const [servicesRes, blogsRes] = await Promise.all([
-          productsApi.getProducts({ limit: 3 }),
+        const [capsRes, workRes, galleryRes, blogRes] = await Promise.all([
+          capabilitiesApi.getProducts({ limit: 4 }),
+          galleryApi.getWork({ limit: 6 }),
+          galleryApi.getGallery({ limit: 8, featured: 'true' }),
           blogApi.getBlogs({ limit: 3 })
         ]);
-        if (servicesRes?.data) setFeaturedServices(servicesRes.data);
-        if (blogsRes?.data) setLatestBlogs(blogsRes.data);
+
+        if (capsRes?.data) setCapabilities(capsRes.data);
+        if (workRes?.data) setWorkItems(workRes.data);
+        if (galleryRes?.data) setGalleryItems(galleryRes.data);
+        if (blogRes?.data) setBlogs(blogRes.data);
       } catch (err) {
-        console.error('Failed to load homepage dynamic data', err);
+        console.error('Failed to load homepage showcase data:', err);
       } finally {
         setLoading(false);
       }
@@ -43,452 +56,627 @@ const HomePage = () => {
     loadHomeData();
   }, []);
 
+  const openLightboxWith = (list, index) => {
+    setLightboxItems(list);
+    setLightboxIndex(index);
+    setLightboxOpen(true);
+  };
+
   return (
     <>
       <SEO
-        title="Industrial Electroplating & Metal Finishing Job Work | MIDC Ambad, Nashik"
-        description="Anant Metal Finishers (AMP) provides industrial electroplating and metal finishing job work for components in MIDC Ambad, Nashik, Maharashtra."
+        title="Anant Metal Finishers (AMF) | Industrial Metal Finishing & Electroplating | Nashik"
+        description="Official corporate portal for Anant Metal Finishers (AMF), located in G-8, MIDC Ambad, Nashik, Maharashtra. Explore our verified industrial metal finishing and electroplating capabilities, work gallery, and facility."
       />
 
-      {/* 1. HERO SECTION */}
-      <section className="relative bg-gradient-to-b from-slate-950 via-slate-900 to-slate-900 text-white overflow-hidden py-16 lg:py-24 border-b border-slate-800">
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-blue-900/20 via-transparent to-transparent pointer-events-none"></div>
-
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-            {/* Left Column: Headline and CTAs */}
-            <div className="lg:col-span-7 space-y-6">
-              <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-900/60 border border-blue-700/60 text-xs font-semibold text-sky-300">
-                <span className="w-2 h-2 rounded-full bg-sky-400 animate-pulse"></span>
-                <span>Industrial Metal Finishing & Electroplating Job Work</span>
-              </div>
-
-              <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-[1.15]">
-                Industrial Electroplating &amp;{' '}
-                <span className="text-transparent bg-clip-text bg-gradient-to-r from-sky-400 via-blue-200 to-white">
-                  Metal Finishing Solutions
-                </span>
-              </h1>
-
-              <p className="text-base sm:text-lg text-slate-300 max-w-2xl leading-relaxed">
-                Explore electroplating job-work solutions for industrial components. Share your component specifications and production requirements to enquire about suitable finishing services.
-              </p>
-
-              {/* Action Buttons */}
-              <div className="flex flex-wrap items-center gap-4 pt-2">
-                <Link
-                  to="/quote"
-                  className="btn-accent gap-2 text-base shadow-lg shadow-amber-900/30"
-                >
-                  <span>Request a Quote</span>
-                  <ArrowRight className="w-5 h-5" />
-                </Link>
-
-                <Link
-                  to="/products"
-                  className="px-6 py-3 rounded-lg bg-slate-800/80 hover:bg-slate-700 text-white font-medium border border-slate-700 text-base transition-colors flex items-center gap-2"
-                >
-                  <span>Explore Services</span>
-                  <ChevronRight className="w-4 h-4 text-slate-400" />
-                </Link>
-              </div>
-
-              {/* Factual Highlights Bar */}
-              <div className="pt-6 grid grid-cols-2 sm:grid-cols-3 gap-4 border-t border-slate-800/80 text-xs text-slate-400">
-                <div>
-                  <span className="block font-semibold text-slate-200 text-sm">G-8, MIDC Ambad</span>
-                  <span>Nashik Industrial Corridor</span>
-                </div>
-                <div>
-                  <span className="block font-semibold text-slate-200 text-sm">B2B Job Work</span>
-                  <span>Component Batch Processing</span>
-                </div>
-                <div>
-                  <span className="block font-semibold text-slate-200 text-sm">Specification First</span>
-                  <span>Drawing & Sample Review</span>
-                </div>
-              </div>
-            </div>
-
-            {/* Right Column: Industrial Hero Visual */}
-            <div className="lg:col-span-5">
-              <IndustrialHeroVisual />
-            </div>
-          </div>
+      {/* ==================================================
+          SECTION 1 — HERO
+          ================================================== */}
+      <section className="relative min-h-[640px] lg:min-h-[720px] flex items-center bg-slate-950 text-white overflow-hidden border-b border-slate-800">
+        {/* Background Visual with Subtle Industrial Film Overlay */}
+        <div className="absolute inset-0 z-0">
+          <img
+            src="https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=2000&q=85"
+            alt="Anant Metal Finishers Industrial Workshop"
+            className="w-full h-full object-cover opacity-25 scale-105"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-slate-950 via-slate-950/90 to-slate-900/80" />
+          <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,_var(--tw-gradient-stops))] from-blue-900/30 via-transparent to-transparent pointer-events-none" />
         </div>
-      </section>
 
-      {/* 2. COMPANY INTRODUCTION */}
-      <section className="py-16 bg-white border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
-            <div className="lg:col-span-8 space-y-4">
-              <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-2.5 py-1 rounded border border-blue-200">
-                Facility Overview
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight">
-                Anant Metal Finishers (AMP)
-              </h2>
-              <p className="text-slate-600 leading-relaxed text-base">
-                {settings.aboutStory ||
-                  'Anant Metal Finishers is an industrial electroplating and metal finishing job-work facility located at G-8, MIDC Ambad, Nashik, Maharashtra. We provide dependable surface treatment and protective finishing for engineering components, machine parts, and component suppliers.'}
-              </p>
-              <p className="text-slate-600 leading-relaxed text-base">
-                Operating within Nashik’s core industrial hub, we evaluate parts against engineering tolerances, base substrate conditions, and required protective finishes to deliver reliable job work.
-              </p>
-              <div className="pt-2">
-                <Link
-                  to="/about"
-                  className="inline-flex items-center gap-1.5 text-blue-700 hover:text-blue-900 font-semibold text-sm group"
-                >
-                  <span>Learn more about our facility and values</span>
-                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                </Link>
-              </div>
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 relative z-10 w-full">
+          <div className="max-w-3xl space-y-6">
+            <div className="inline-flex items-center gap-2.5 px-3.5 py-1.5 rounded-full bg-blue-950/80 border border-blue-800/80 text-xs font-semibold text-sky-400 backdrop-blur-sm shadow-sm">
+              <span className="w-2 h-2 rounded-full bg-sky-400 animate-pulse" />
+              <span>Plot G-8, MIDC Ambad • Nashik, Maharashtra</span>
             </div>
 
-            <div className="lg:col-span-4 bg-slate-50 p-6 rounded-2xl border border-slate-200 space-y-4">
-              <h3 className="font-bold text-slate-900 text-base flex items-center gap-2">
-                <MapPin className="w-5 h-5 text-blue-700" />
-                <span>Strategic MIDC Location</span>
-              </h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Conveniently situated in Ambad MIDC to support precision machining shops, automotive ancillaries, and industrial fabricators across Nashik.
-              </p>
-              <div className="text-xs font-mono bg-white p-3 rounded-lg border border-slate-200 text-slate-700">
-                Plot G-8, MIDC Ambad, Nashik – 422010
-              </div>
+            <h1 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-white leading-[1.12]">
+              Anant Metal Finishers
+            </h1>
+
+            <p className="text-xl sm:text-2xl font-semibold text-sky-300 tracking-tight">
+              Industrial Metal Finishing &amp; Electroplating
+            </p>
+
+            <p className="text-base sm:text-lg text-slate-300 max-w-2xl leading-relaxed">
+              An industrial finishing company based in MIDC Ambad, Nashik, focused on metal finishing and electroplating capabilities.
+            </p>
+
+            {/* Buttons: Explore Company & View Gallery */}
+            <div className="flex flex-wrap items-center gap-4 pt-4">
               <Link
-                to="/contact"
-                className="w-full btn-secondary text-xs justify-center gap-2"
+                to="/about"
+                className="btn-primary gap-2 text-base shadow-xl shadow-blue-900/30 bg-blue-700 hover:bg-blue-600 px-7 py-3.5"
               >
-                <span>View Directions & Contact Details</span>
+                <span>Explore Company</span>
+                <ArrowRight className="w-5 h-5" />
+              </Link>
+
+              <Link
+                to="/gallery"
+                className="px-6 py-3.5 rounded-xl bg-slate-900/90 hover:bg-slate-800 text-white font-semibold border border-slate-700 text-base transition-colors flex items-center gap-2 backdrop-blur-sm"
+              >
+                <span>View Gallery</span>
+                <ChevronRight className="w-4 h-4 text-slate-400" />
               </Link>
             </div>
           </div>
         </div>
       </section>
 
-      {/* 3. FEATURED SERVICES (Strictly verified and published services only!) */}
-      <section className="py-16 bg-slate-50 border-b border-slate-200">
+      {/* ==================================================
+          SECTION 2 — COMPANY INTRODUCTION
+          ================================================== */}
+      <section className="py-20 bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-10">
-            <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-100/60 px-2.5 py-1 rounded border border-blue-200">
-                Verified Capabilities
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight mt-2">
-                Featured Metal-Finishing Services
-              </h2>
-              <p className="text-slate-600 text-sm mt-1 max-w-xl">
-                Displaying only confirmed and administrator-verified job-work capabilities.
-              </p>
-            </div>
-            <Link
-              to="/products"
-              className="mt-4 md:mt-0 text-sm font-semibold text-blue-700 hover:text-blue-900 inline-flex items-center gap-1"
-            >
-              <span>View full catalogue</span>
-              <ChevronRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <CardSkeleton />
-              <CardSkeleton />
-              <CardSkeleton />
-            </div>
-          ) : featuredServices.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {featuredServices.map((service) => (
-                <div
-                  key={service._id}
-                  className="bg-white rounded-xl border border-slate-200 shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between overflow-hidden"
-                >
-                  <div className="p-6">
-                    <div className="flex items-center justify-between mb-3">
-                      <span className="text-xs font-semibold text-blue-700 bg-blue-50 px-2.5 py-1 rounded">
-                        {service.category}
-                      </span>
-                      <span className="badge-verified">
-                        <CheckCircle2 className="w-3.5 h-3.5" />
-                        <span>Verified</span>
-                      </span>
-                    </div>
-
-                    <h3 className="text-lg font-bold text-slate-900 mb-2">
-                      <Link
-                        to={`/products/${service.slug}`}
-                        className="hover:text-blue-700 transition-colors"
-                      >
-                        {service.name}
-                      </Link>
-                    </h3>
-
-                    <p className="text-sm text-slate-600 line-clamp-3 leading-relaxed mb-4">
-                      {service.summary}
-                    </p>
-
-                    {service.materials?.length > 0 && (
-                      <div className="mb-4">
-                        <span className="text-xs font-semibold text-slate-400 uppercase tracking-wider block mb-1">
-                          Compatible Substrates
-                        </span>
-                        <div className="flex flex-wrap gap-1.5">
-                          {service.materials.map((mat, idx) => (
-                            <span
-                              key={idx}
-                              className="text-xs bg-slate-100 text-slate-700 px-2 py-0.5 rounded font-medium"
-                            >
-                              {mat}
-                            </span>
-                          ))}
-                        </div>
-                      </div>
-                    )}
-                  </div>
-
-                  <div className="px-6 py-4 bg-slate-50 border-t border-slate-100 flex items-center justify-between">
-                    <Link
-                      to={`/products/${service.slug}`}
-                      className="text-xs font-semibold text-blue-700 hover:text-blue-900"
-                    >
-                      View Details →
-                    </Link>
-                    <Link
-                      to={`/quote?service=${encodeURIComponent(service.name)}`}
-                      className="btn-primary text-xs py-1.5 px-3"
-                    >
-                      Enquire for Job Work
-                    </Link>
-                  </div>
-                </div>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-12 bg-white rounded-xl border border-slate-200">
-              <p className="text-slate-600 text-sm">
-                Electroplating job work is currently undergoing specification review.
-              </p>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* 4. WHY CHOOSE US (Administrator managed & strictly factual) */}
-      <section className="py-16 bg-white border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="text-center max-w-3xl mx-auto mb-12">
-            <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-2.5 py-1 rounded border border-blue-200">
-              Our Operational Focus
-            </span>
-            <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight mt-2">
-              Why Partner With Anant Metal Finishers
-            </h2>
-            <p className="text-slate-600 text-sm mt-2">
-              Dependable industrial job work built on technical transparency, inspection discipline, and responsive coordination.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="p-6 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 transition-colors space-y-3">
-              <div className="w-10 h-10 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center">
-                <Sliders className="w-5 h-5" />
-              </div>
-              <h3 className="font-bold text-slate-900 text-lg">Drawing &amp; Specification Review</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                We review component base materials, surface conditions, dimensional allowances, and plating thickness targets before accepting job work.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 transition-colors space-y-3">
-              <div className="w-10 h-10 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center">
-                <MapPin className="w-5 h-5" />
-              </div>
-              <h3 className="font-bold text-slate-900 text-lg">Local Industrial Presence</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                Located in G-8, MIDC Ambad, Nashik, providing seamless logistics and direct technical communication for local manufacturing units.
-              </p>
-            </div>
-
-            <div className="p-6 rounded-xl border border-slate-200 bg-slate-50/50 hover:bg-slate-50 transition-colors space-y-3">
-              <div className="w-10 h-10 rounded-lg bg-blue-100 text-blue-700 flex items-center justify-center">
-                <Layers className="w-5 h-5" />
-              </div>
-              <h3 className="font-bold text-slate-900 text-lg">Sample &amp; Batch Trials</h3>
-              <p className="text-sm text-slate-600 leading-relaxed">
-                For regular production requirements, we support trial batches to align finish consistency and bath suitability with your quality benchmarks.
-              </p>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* 5. BUSINESS ENQUIRY CTA SECTION */}
-      <section className="py-16 bg-gradient-to-r from-slate-900 via-blue-950 to-slate-900 text-white relative overflow-hidden">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center space-y-6 relative z-10">
-          <span className="text-xs font-semibold uppercase tracking-widest text-sky-400 bg-blue-900/60 px-3 py-1 rounded-full border border-blue-700/60">
-            Industrial Job-Work Inquiries
-          </span>
-
-          <h2 className="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-white max-w-2xl mx-auto tracking-tight">
-            Looking for an Electroplating Job-Work Partner?
-          </h2>
-
-          <p className="text-slate-300 max-w-xl mx-auto text-base leading-relaxed">
-            Send us your component drawings, surface finish requirements, and expected batch quantities for a technical review.
-          </p>
-
-          <div className="pt-2">
-            <Link
-              to="/quote"
-              className="btn-accent px-8 py-3.5 text-base shadow-xl gap-2 font-bold"
-            >
-              <span>Discuss Your Requirements</span>
-              <ArrowRight className="w-5 h-5" />
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* 6. LATEST BLOG ARTICLES (Real database records) */}
-      <section className="py-16 bg-slate-50 border-b border-slate-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between mb-10">
-            <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-100/60 px-2.5 py-1 rounded border border-blue-200">
-                Technical Knowledge
-              </span>
-              <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight mt-2">
-                Latest Articles &amp; Finishing Guides
-              </h2>
-              <p className="text-slate-600 text-sm mt-1">
-                Practical insights on industrial electroplating, surface preparation, and job-work planning.
-              </p>
-            </div>
-            <Link
-              to="/blog"
-              className="mt-4 md:mt-0 text-sm font-semibold text-blue-700 hover:text-blue-900 inline-flex items-center gap-1"
-            >
-              <span>Browse all articles</span>
-              <ChevronRight className="w-4 h-4" />
-            </Link>
-          </div>
-
-          {loading ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <CardSkeleton />
-              <CardSkeleton />
-              <CardSkeleton />
-            </div>
-          ) : latestBlogs.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {latestBlogs.map((post) => (
-                <article
-                  key={post._id}
-                  className="bg-white rounded-xl border border-slate-200 overflow-hidden shadow-sm hover:shadow-md transition-shadow flex flex-col justify-between"
-                >
-                  <div className="p-6">
-                    <div className="flex items-center justify-between text-xs text-slate-500 mb-3">
-                      <span className="font-semibold text-blue-700 bg-blue-50 px-2 py-0.5 rounded">
-                        {post.category}
-                      </span>
-                      <span className="flex items-center gap-1">
-                        <Clock className="w-3.5 h-3.5" />
-                        <span>{post.readingTime}</span>
-                      </span>
-                    </div>
-
-                    <h3 className="text-base font-bold text-slate-900 mb-2 leading-snug">
-                      <Link
-                        to={`/blog/${post.slug}`}
-                        className="hover:text-blue-700 transition-colors"
-                      >
-                        {post.title}
-                      </Link>
-                    </h3>
-
-                    <p className="text-sm text-slate-600 line-clamp-3 leading-relaxed">
-                      {post.summary}
-                    </p>
-                  </div>
-
-                  <div className="px-6 py-3.5 bg-slate-50 border-t border-slate-100 flex items-center justify-between text-xs">
-                    <span className="text-slate-400">
-                      {new Date(post.publicationDate || post.createdAt).toLocaleDateString('en-IN', {
-                        year: 'numeric',
-                        month: 'short',
-                        day: 'numeric'
-                      })}
-                    </span>
-                    <Link
-                      to={`/blog/${post.slug}`}
-                      className="font-semibold text-blue-700 hover:text-blue-900 inline-flex items-center gap-1"
-                    >
-                      <span>Read Guide</span>
-                      <ArrowRight className="w-3.5 h-3.5" />
-                    </Link>
-                  </div>
-                </article>
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-10 bg-white rounded-xl border border-slate-200">
-              <p className="text-slate-500 text-sm">Educational articles will appear here once published.</p>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* 7. CONTACT PREVIEW */}
-      <section className="py-16 bg-white">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="bg-slate-900 rounded-2xl text-white p-8 sm:p-12 border border-slate-800">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-              <div className="lg:col-span-8 space-y-4">
-                <span className="text-xs font-semibold text-sky-400 uppercase tracking-wider">
-                  Contact Anant Metal Finishers
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            <div className="lg:col-span-7 space-y-6">
+              <div>
+                <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-3 py-1 rounded border border-blue-200">
+                  Company Overview
                 </span>
-                <h2 className="text-2xl sm:text-3xl font-bold tracking-tight">
-                  Reach Our Ambad Industrial Workshop
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mt-3">
+                  About Anant Metal Finishers
                 </h2>
-                <p className="text-slate-300 text-sm leading-relaxed max-w-xl">
-                  Whether you are planning prototype trials or regular metal finishing job work, connect with our team to discuss your component specifications.
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 pt-2 text-sm text-slate-300">
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-4 h-4 text-sky-400" />
-                    <span>G-8, MIDC Ambad, Nashik – 422010</span>
+              </div>
+
+              <p className="text-slate-600 text-base sm:text-lg leading-relaxed">
+                Anant Metal Finishers is an industrial company located in G-8, MIDC Ambad, Nashik, Maharashtra.
+              </p>
+
+              <p className="text-slate-600 text-base leading-relaxed">
+                Operating within one of Maharashtra’s key manufacturing hubs, our workshop is dedicated to metal finishing and electroplating job work for mechanical engineering components, machined hardware, and precision assemblies.
+              </p>
+
+              <p className="text-slate-600 text-base leading-relaxed">
+                We focus on dependable surface treatment where component pre-cleaning, chemical immersion cycles, and final rinsing are managed strictly in accordance with component drawing tolerances.
+              </p>
+
+              <div>
+                <Link
+                  to="/about"
+                  className="btn-primary gap-2 text-sm bg-blue-700 hover:bg-blue-800"
+                >
+                  <span>Know More About Us</span>
+                  <ArrowRight className="w-4 h-4" />
+                </Link>
+              </div>
+            </div>
+
+            {/* Industrial Photograph Illustration */}
+            <div className="lg:col-span-5">
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-slate-200 bg-slate-900">
+                <img
+                  src="https://images.unsplash.com/photo-1504917599217-d4dc5ebe6122?auto=format&fit=crop&w=1000&q=80"
+                  alt="Anant Metal Finishers Industrial Workshop Facility"
+                  className="w-full h-80 sm:h-96 object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent flex items-end p-6">
+                  <div className="text-white text-xs font-mono">
+                    <span className="text-sky-400 font-semibold block">G-8, MIDC Ambad</span>
+                    <span>Nashik, Maharashtra – 422010</span>
                   </div>
-                  {settings.phone ? (
-                    <div className="flex items-center gap-2">
-                      <span>Phone: {settings.phone}</span>
-                    </div>
-                  ) : null}
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ==================================================
+          SECTION 3 — COMPANY HIGHLIGHTS
+          ================================================== */}
+      <section className="py-16 bg-slate-100 border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="text-center max-w-2xl mx-auto mb-12">
+            <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
+              Key Business Facts
+            </span>
+            <h3 className="text-2xl sm:text-3xl font-bold text-slate-900 tracking-tight mt-1">
+              Company Highlights
+            </h3>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* 01 Industrial Location */}
+            <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+              <span className="text-3xl font-extrabold text-blue-100 absolute top-4 right-4 select-none">
+                01
+              </span>
+              <span className="text-xs font-bold uppercase tracking-wider text-blue-700 block mb-2">
+                Industrial Location
+              </span>
+              <h4 className="text-lg font-extrabold text-slate-900">
+                G-8, MIDC Ambad, Nashik
+              </h4>
+              <p className="text-xs text-slate-500 mt-2 leading-relaxed">
+                Situated in MIDC Ambad, the manufacturing core of Nashik, Maharashtra.
+              </p>
+            </div>
+
+            {/* 02 Business Focus */}
+            <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+              <span className="text-3xl font-extrabold text-blue-100 absolute top-4 right-4 select-none">
+                02
+              </span>
+              <span className="text-xs font-bold uppercase tracking-wider text-blue-700 block mb-2">
+                Business Focus
+              </span>
+              <h4 className="text-lg font-extrabold text-slate-900">
+                Metal Finishing
+              </h4>
+              <p className="text-xs text-slate-500 mt-2 leading-relaxed">
+                Substrate preparation, descaling, protective coating, and surface conditioning.
+              </p>
+            </div>
+
+            {/* 03 Industrial Capability */}
+            <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+              <span className="text-3xl font-extrabold text-blue-100 absolute top-4 right-4 select-none">
+                03
+              </span>
+              <span className="text-xs font-bold uppercase tracking-wider text-blue-700 block mb-2">
+                Industrial Capability
+              </span>
+              <h4 className="text-lg font-extrabold text-slate-900">
+                Electroplating
+              </h4>
+              <p className="text-xs text-slate-500 mt-2 leading-relaxed">
+                Commercial electrolytic plating job work for engineered metal parts.
+              </p>
+            </div>
+
+            {/* 04 Brand */}
+            <div className="bg-white rounded-2xl p-6 border border-slate-200 shadow-sm hover:shadow-md transition-shadow relative overflow-hidden">
+              <span className="text-3xl font-extrabold text-blue-100 absolute top-4 right-4 select-none">
+                04
+              </span>
+              <span className="text-xs font-bold uppercase tracking-wider text-blue-700 block mb-2">
+                Brand
+              </span>
+              <h4 className="text-lg font-extrabold text-slate-900">
+                {settings.brandAbbreviation || 'AMF'}
+              </h4>
+              <p className="text-xs text-slate-500 mt-2 leading-relaxed">
+                Anant Metal Finishers official brand identity and workshop symbol.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ==================================================
+          SECTION 4 — CAPABILITIES
+          ================================================== */}
+      <section className="py-20 bg-white border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-3 py-1 rounded border border-blue-200">
+                Verified Industrial Job Work
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mt-3">
+                Our Capabilities
+              </h2>
+              <p className="text-slate-600 text-sm sm:text-base mt-2 max-w-xl">
+                Displaying confirmed capabilities managed through our workshop. Technical specifications are evaluated against customer drawings.
+              </p>
+            </div>
+
+            <Link
+              to="/capabilities"
+              className="inline-flex items-center gap-1.5 text-sm font-bold text-blue-700 hover:text-blue-900 transition-colors"
+            >
+              <span>View All Capabilities</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+
+          {/* Capabilities Grid */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {capabilities.map((cap) => (
+              <div
+                key={cap._id}
+                className="group bg-slate-50 rounded-2xl border border-slate-200 overflow-hidden hover:shadow-xl transition-all duration-300 flex flex-col justify-between hover:-translate-y-1"
+              >
+                <div>
+                  <div className="h-44 overflow-hidden bg-slate-900 relative">
+                    <img
+                      src={cap.mainImage || 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=800&q=80'}
+                      alt={cap.name}
+                      loading="lazy"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                    />
+                    <span className="absolute top-2.5 left-2.5 text-[10px] font-bold uppercase tracking-wider bg-slate-900/80 text-sky-400 px-2 py-0.5 rounded backdrop-blur-sm border border-slate-700">
+                      {cap.category}
+                    </span>
+                  </div>
+
+                  <div className="p-5 space-y-2">
+                    <h3 className="text-base font-bold text-slate-900 group-hover:text-blue-700 transition-colors">
+                      {cap.name}
+                    </h3>
+                    <p className="text-xs text-slate-600 line-clamp-3 leading-relaxed">
+                      {cap.summary}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="p-5 pt-0">
+                  <Link
+                    to={`/capabilities/${cap.slug}`}
+                    className="inline-flex items-center gap-1.5 text-xs font-bold text-blue-700 hover:text-blue-900 transition-colors"
+                  >
+                    <span>View details</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ==================================================
+          SECTION 5 — OUR WORK (Visual Component Portfolio)
+          ================================================== */}
+      <section className="py-20 bg-slate-900 text-white border-b border-slate-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-sky-400 bg-blue-950 px-3 py-1 rounded border border-blue-800">
+                Component Showcase
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mt-3">
+                Our Work
+              </h2>
+              <p className="text-slate-400 text-sm sm:text-base mt-2 max-w-xl">
+                Real photographs of metal components, finished hardware, and plating work handled at our MIDC Ambad facility.
+              </p>
+            </div>
+
+            <Link
+              to="/our-work"
+              className="inline-flex items-center gap-1.5 text-sm font-bold text-sky-400 hover:text-sky-300 transition-colors"
+            >
+              <span>Explore Portfolio</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+
+          {/* Work Items Grid with Lightbox Trigger */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {workItems.map((item, idx) => (
+              <div
+                key={item._id}
+                onClick={() => openLightboxWith(workItems, idx)}
+                className="group relative rounded-2xl overflow-hidden bg-slate-950 border border-slate-800 cursor-pointer shadow-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
+              >
+                <div className="h-64 overflow-hidden relative">
+                  <img
+                    src={item.imageUrl}
+                    alt={item.title}
+                    loading="lazy"
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-slate-950 via-slate-950/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex items-end p-4">
+                    <span className="inline-flex items-center gap-1.5 text-xs font-semibold text-white bg-blue-600/90 px-3 py-1.5 rounded-lg backdrop-blur-sm shadow">
+                      <Eye className="w-3.5 h-3.5" />
+                      <span>Enlarge Photo</span>
+                    </span>
+                  </div>
+                  {item.category && (
+                    <span className="absolute top-3 left-3 text-[10px] font-bold uppercase tracking-wider bg-slate-950/80 text-sky-400 px-2.5 py-1 rounded border border-slate-800">
+                      {item.category}
+                    </span>
+                  )}
+                </div>
+
+                <div className="p-5">
+                  <h4 className="text-base font-bold text-white group-hover:text-sky-300 transition-colors">
+                    {item.title}
+                  </h4>
+                  {item.description && (
+                    <p className="text-xs text-slate-400 mt-1 line-clamp-2 leading-relaxed">
+                      {item.description}
+                    </p>
+                  )}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ==================================================
+          SECTION 6 — FACTORY / COMPANY
+          ================================================== */}
+      <section className="py-20 bg-white border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+            {/* Visual Column: Signboard / Workshop Image */}
+            <div className="lg:col-span-6">
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl border border-slate-200 bg-slate-950">
+                <img
+                  src="https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&w=1200&q=80"
+                  alt="Industrial Presence in Nashik - G-8, MIDC Ambad"
+                  className="w-full h-80 sm:h-[400px] object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-slate-950/85 via-transparent to-transparent flex items-end p-6 sm:p-8">
+                  <div className="text-white space-y-1">
+                    <span className="text-xs font-mono text-sky-400 uppercase tracking-wider block">
+                      Official Workshop Address
+                    </span>
+                    <h4 className="text-lg sm:text-xl font-bold">
+                      Plot G-8, MIDC Ambad, Nashik – 422010
+                    </h4>
+                    <p className="text-xs text-slate-300">
+                      Maharashtra, India
+                    </p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Information Column */}
+            <div className="lg:col-span-6 space-y-6">
+              <div>
+                <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-3 py-1 rounded border border-blue-200">
+                  Location &amp; Infrastructure
+                </span>
+                <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mt-3">
+                  Industrial Presence in Nashik
+                </h2>
+              </div>
+
+              <div className="space-y-3 text-slate-600 text-base leading-relaxed">
+                <p>
+                  <strong>Anant Metal Finishers</strong> operates from Plot G-8 in the Ambad industrial area of Nashik, one of Western India's most prominent automotive and engineering manufacturing belts.
+                </p>
+                <p>
+                  Our workshop location offers seamless logistics connectivity for industrial component manufacturers, jobbing machine shops, and engineering OEMs across Nashik and neighboring industrial regions.
+                </p>
+              </div>
+
+              <div className="p-4 rounded-xl bg-slate-50 border border-slate-200 space-y-2 text-xs text-slate-600 font-mono">
+                <div className="flex items-center gap-2">
+                  <MapPin className="w-4 h-4 text-blue-700 shrink-0" />
+                  <span><strong>Plot:</strong> G-8, MIDC Ambad</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="w-4 h-4" />
+                  <span><strong>City:</strong> Nashik, Maharashtra 422010, India</span>
                 </div>
               </div>
 
-              <div className="lg:col-span-4 flex flex-col sm:flex-row lg:flex-col gap-3">
-                <Link
-                  to="/contact"
-                  className="btn-primary text-center text-sm py-3 bg-blue-600 hover:bg-blue-700"
-                >
-                  Contact Us
-                </Link>
+              <div className="pt-2">
                 <a
                   href={settings.googleMapsUrl || 'https://maps.google.com/?q=G-8,+MIDC+Ambad,+Nashik,+Maharashtra+422010'}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="px-4 py-3 rounded-lg bg-slate-800 hover:bg-slate-700 text-slate-200 text-center text-sm font-medium border border-slate-700 transition-colors"
+                  className="btn-primary gap-2 text-sm bg-blue-700 hover:bg-blue-800"
                 >
-                  Open in Google Maps
+                  <span>View on Google Maps</span>
+                  <ExternalLink className="w-4 h-4" />
                 </a>
               </div>
             </div>
           </div>
         </div>
       </section>
+
+      {/* ==================================================
+          SECTION 7 — PHOTO GALLERY PREVIEW
+          ================================================== */}
+      <section className="py-20 bg-slate-50 border-b border-slate-200">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <div>
+              <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-3 py-1 rounded border border-blue-200">
+                Visual Archive
+              </span>
+              <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mt-3">
+                Photo Gallery Preview
+              </h2>
+              <p className="text-slate-600 text-sm sm:text-base mt-2 max-w-xl">
+                A selection of photographs showing our factory operations, machinery, and component finishing.
+              </p>
+            </div>
+
+            <Link
+              to="/gallery"
+              className="btn-primary gap-2 text-sm bg-blue-700 hover:bg-blue-800"
+            >
+              <span>View Complete Gallery</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+
+          {/* 6-8 Photographs Grid with Lightbox */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4 sm:gap-6">
+            {galleryItems.slice(0, 8).map((item, idx) => (
+              <div
+                key={item._id}
+                onClick={() => openLightboxWith(galleryItems, idx)}
+                className="group relative rounded-2xl overflow-hidden bg-slate-900 aspect-square cursor-pointer border border-slate-200 shadow-sm hover:shadow-xl transition-all duration-300"
+              >
+                <img
+                  src={item.imageUrl}
+                  alt={item.title}
+                  loading="lazy"
+                  className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500"
+                />
+                <div className="absolute inset-0 bg-slate-950/60 opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4 text-white">
+                  <span className="text-[10px] font-bold uppercase tracking-wider text-sky-400">
+                    {item.category}
+                  </span>
+                  <h5 className="text-xs font-bold truncate mt-0.5">
+                    {item.title}
+                  </h5>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ==================================================
+          SECTION 8 — COMPANY INFORMATION CTA
+          ================================================== */}
+      <section className="py-20 bg-gradient-to-br from-slate-950 via-slate-900 to-blue-950 text-white relative overflow-hidden border-b border-slate-800">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center space-y-6">
+          <span className="text-xs font-bold uppercase tracking-wider text-sky-400 bg-blue-900/60 px-3.5 py-1.5 rounded-full border border-blue-700/60 inline-block">
+            Official Industrial Presence
+          </span>
+
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
+            Explore Anant Metal Finishers
+          </h2>
+
+          <p className="text-slate-300 text-base sm:text-lg max-w-2xl mx-auto leading-relaxed">
+            Discover our company, capabilities, industrial presence and work through our website.
+          </p>
+
+          <div className="pt-4 flex flex-wrap justify-center gap-4">
+            <Link
+              to="/about"
+              className="btn-primary gap-2 text-base px-8 py-3.5 bg-blue-600 hover:bg-blue-500 shadow-xl"
+            >
+              <span>About the Company</span>
+              <ArrowRight className="w-5 h-5" />
+            </Link>
+
+            <Link
+              to="/capabilities"
+              className="px-8 py-3.5 rounded-xl bg-slate-900 hover:bg-slate-800 text-white font-semibold border border-slate-700 text-base transition-colors"
+            >
+              <span>Our Capabilities</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* ==================================================
+          SECTION 9 — CONTACT PREVIEW
+          ================================================== */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-12">
+          <div className="text-center max-w-2xl mx-auto">
+            <span className="text-xs font-bold uppercase tracking-wider text-blue-700 bg-blue-50 px-3 py-1 rounded border border-blue-200">
+              Direct Communication
+            </span>
+            <h2 className="text-3xl sm:text-4xl font-extrabold text-slate-900 tracking-tight mt-3">
+              Contact Anant Metal Finishers
+            </h2>
+            <p className="text-slate-600 text-sm sm:text-base mt-2">
+              Reach out for component finishing inquiries, workshop visits, and drawing assessments.
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+            {/* Address */}
+            <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center">
+                <MapPin className="w-5 h-5" />
+              </div>
+              <h4 className="text-base font-bold text-slate-900">Workshop Address</h4>
+              <p className="text-xs text-slate-600 leading-relaxed font-mono">
+                G-8, MIDC Ambad, Nashik, Maharashtra – 422010, India
+              </p>
+              <a
+                href={settings.googleMapsUrl || 'https://maps.google.com/?q=G-8,+MIDC+Ambad,+Nashik,+Maharashtra+422010'}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs font-semibold text-blue-700 hover:text-blue-900 flex items-center gap-1 mt-2 inline-flex"
+              >
+                <span>Google Maps Directions</span>
+                <ExternalLink className="w-3.5 h-3.5" />
+              </a>
+            </div>
+
+            {/* Telephone (Verified only) */}
+            <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center">
+                <Phone className="w-5 h-5" />
+              </div>
+              <h4 className="text-base font-bold text-slate-900">Telephone</h4>
+              {settings.phone ? (
+                <a
+                  href={`tel:${settings.phone}`}
+                  className="text-sm font-semibold text-slate-800 hover:text-blue-700 block font-mono"
+                >
+                  {settings.phone}
+                </a>
+              ) : (
+                <p className="text-xs text-slate-500 italic">
+                  Contact details available via business message form.
+                </p>
+              )}
+            </div>
+
+            {/* Email (Verified only) */}
+            <div className="bg-slate-50 rounded-2xl p-6 border border-slate-200 space-y-3">
+              <div className="w-10 h-10 rounded-xl bg-blue-100 text-blue-700 flex items-center justify-center">
+                <Mail className="w-5 h-5" />
+              </div>
+              <h4 className="text-base font-bold text-slate-900">Official Email</h4>
+              {settings.email ? (
+                <a
+                  href={`mailto:${settings.email}`}
+                  className="text-sm font-semibold text-slate-800 hover:text-blue-700 block font-mono"
+                >
+                  {settings.email}
+                </a>
+              ) : (
+                <p className="text-xs text-slate-500 italic">
+                  Submit inquiries through our verified contact desk.
+                </p>
+              )}
+            </div>
+          </div>
+
+          {/* Primary Action Button */}
+          <div className="text-center pt-4">
+            <Link
+              to="/contact"
+              className="btn-primary text-base gap-2 px-8 py-3.5 bg-blue-700 hover:bg-blue-800 inline-flex shadow-lg"
+            >
+              <span>Contact Us</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Global Interactive Lightbox Modal */}
+      <Lightbox
+        items={lightboxItems}
+        currentIndex={lightboxIndex}
+        isOpen={lightboxOpen}
+        onClose={() => setLightboxOpen(false)}
+        onIndexChange={(newIdx) => setLightboxIndex(newIdx)}
+      />
     </>
   );
 };

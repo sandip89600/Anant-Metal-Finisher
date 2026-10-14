@@ -12,7 +12,8 @@ import {
   X,
   ShieldCheck,
   User,
-  KeyRound
+  KeyRound,
+  Image as ImageIcon
 } from 'lucide-react';
 import { useAuth } from '../../context/AuthContext';
 import { useSettings } from '../../context/SettingsContext';
@@ -30,9 +31,10 @@ const AdminLayout = () => {
 
   const navItems = [
     { name: 'Dashboard', path: '/admin', icon: LayoutDashboard, exact: true },
-    { name: 'Products & Services', path: '/admin/products', icon: Layers },
+    { name: 'Capabilities', path: '/admin/capabilities', icon: Layers },
+    { name: 'Gallery & Work', path: '/admin/gallery', icon: ImageIcon },
     { name: 'Blog Articles', path: '/admin/blog', icon: FileText },
-    { name: 'Enquiries & Quotes', path: '/admin/enquiries', icon: Mail },
+    { name: 'Contact Messages', path: '/admin/messages', icon: Mail },
     { name: 'Company Settings', path: '/admin/settings', icon: Settings }
   ];
 
@@ -44,11 +46,11 @@ const AdminLayout = () => {
         <div className="p-5 border-b border-slate-800 flex items-center justify-between">
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-700 to-sky-500 flex items-center justify-center font-extrabold text-white text-base shadow">
-              AMP
+              AMF
             </div>
             <div>
               <span className="font-bold text-white text-sm block leading-tight">
-                AMP Admin
+                AMF Admin
               </span>
               <span className="text-[10px] text-slate-400 font-mono">
                 Workshop Operations
@@ -137,7 +139,7 @@ const AdminLayout = () => {
             </button>
             <div className="flex items-center gap-2 text-xs text-slate-400">
               <span className="w-2 h-2 rounded-full bg-emerald-500"></span>
-              <span className="font-mono hidden sm:inline">AMP Workshop Portal (G-8, MIDC Ambad)</span>
+              <span className="font-mono hidden sm:inline">AMF Workshop Portal (G-8, MIDC Ambad)</span>
             </div>
           </div>
 

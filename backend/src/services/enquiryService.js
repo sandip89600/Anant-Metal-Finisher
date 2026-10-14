@@ -26,7 +26,7 @@ const createEnquiry = async (data, ipAddress = '') => {
   }
 
   // Generate unique reference number
-  const prefix = data.enquiryType === 'quote' ? 'AMP-QUO' : 'AMP-ENQ';
+  const prefix = data.enquiryType === 'quote' ? 'AMF-QUO' : 'AMF-ENQ';
   let referenceNumber = generateReferenceNumber(prefix);
   
   // Ensure uniqueness

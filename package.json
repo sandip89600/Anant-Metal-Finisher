@@ -1,7 +1,7 @@
 {
   "name": "anant-metal-finishers",
   "version": "1.0.0",
-  "description": "Production-Ready Full-Stack Industrial Web Portal for Anant Metal Finishers (AMP) - MIDC Ambad, Nashik",
+  "description": "Production-Ready Full-Stack Industrial Web Portal for Anant Metal Finishers (AMF) - MIDC Ambad, Nashik",
   "scripts": {
     "dev:backend": "npm --prefix backend run dev",
     "dev:frontend": "npm --prefix frontend run dev",
@@ -12,7 +12,7 @@
   },
   "keywords": [
     "anant-metal-finishers",
-    "amp",
+    "amf",
     "electroplating",
     "metal-finishing",
     "nashik",

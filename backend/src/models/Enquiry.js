@@ -82,6 +82,10 @@ const enquirySchema = new mongoose.Schema(
       enum: ['new', 'in_progress', 'completed', 'spam'],
       default: 'new'
     },
+    isRead: {
+      type: Boolean,
+      default: false
+    },
     internalNotes: {
       type: [internalNoteSchema],
       default: []

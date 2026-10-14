@@ -4,6 +4,7 @@ const CompanySettings = require('../src/models/CompanySettings');
 const Product = require('../src/models/Product');
 const Blog = require('../src/models/Blog');
 const Category = require('../src/models/Category');
+const Gallery = require('../src/models/Gallery');
 const env = require('../src/config/env');
 const logger = require('../src/utils/logger');
 
@@ -17,7 +18,7 @@ async function seedData() {
     if (!existingSettings) {
       await CompanySettings.create({
         companyName: 'Anant Metal Finishers',
-        brandAbbreviation: 'AMP',
+        brandAbbreviation: 'AMF',
         businessCategory: 'Industrial metal finishing and electroplating job work',
         locationAddress: {
           street: 'G-8, MIDC Ambad',
@@ -32,7 +33,7 @@ async function seedData() {
         contactNotificationEmail: '',
         workingHours: '', // Placeholder until business confirms hours
         gstNumber: '', // Placeholder until verified
-        aboutStory: 'Anant Metal Finishers (AMP) operates an industrial metal finishing and electroplating job-work facility situated at G-8, MIDC Ambad, Nashik, Maharashtra. Located within one of Maharashtra’s premier manufacturing zones, our shop provides metal-finishing job work for industrial components, engineering manufacturers, and machine component suppliers.',
+        aboutStory: 'Anant Metal Finishers (AMF) operates an industrial metal finishing and electroplating job-work facility situated at G-8, MIDC Ambad, Nashik, Maharashtra. Located within one of Maharashtra’s premier manufacturing zones, our shop provides metal-finishing job work for industrial components, engineering manufacturers, and machine component suppliers.',
         mission: 'To deliver reliable, specification-conscious electroplating and surface finishing job work supporting manufacturing and engineering enterprises across Nashik and neighboring industrial regions.',
         values: 'Factual technical clarity, consistent surface treatment standards, transparent communication on job work capabilities, and dependable turnaround.',
         verifiedCapabilities: [
@@ -41,11 +42,15 @@ async function seedData() {
         ],
         googleMapsUrl: 'https://maps.google.com/?q=G-8,+MIDC+Ambad,+Nashik,+Maharashtra+422010',
         seoDefaults: {
-          metaTitle: 'Anant Metal Finishers (AMP) | Industrial Electroplating Job Work | MIDC Ambad, Nashik',
-          metaDescription: 'Anant Metal Finishers (AMP) in MIDC Ambad, Nashik provides industrial electroplating and metal finishing job work for engineering components. Submit your job specifications for review.'
+          metaTitle: 'Anant Metal Finishers (AMF) | Industrial Electroplating Job Work | MIDC Ambad, Nashik',
+          metaDescription: 'Anant Metal Finishers (AMF) in MIDC Ambad, Nashik provides industrial electroplating and metal finishing job work for engineering components. Submit your job specifications for review.'
         }
       });
       logger.info('Initial factual company settings created');
+    } else {
+      // Keep existing settings updated with AMF
+      existingSettings.brandAbbreviation = 'AMF';
+      await existingSettings.save();
     }
 
     // 2. Seed Categories
@@ -63,48 +68,140 @@ async function seedData() {
     }
     logger.info('Categories seeded');
 
-    // 3. Seed Verified Service (Only confirmed business capability initially published)
-    const confirmedServiceSlug = 'electroplating-job-work';
-    const existingConfirmedService = await Product.findOne({ slug: confirmedServiceSlug });
-
-    if (!existingConfirmedService) {
-      await Product.create({
-        name: 'Industrial Electroplating Job Work',
-        slug: confirmedServiceSlug,
+    // 3. Seed Verified Capabilities (Strict factual capability showcase)
+    const initialCapabilities = [
+      {
+        name: 'Industrial Electroplating',
+        slug: 'industrial-electroplating',
         itemType: 'service',
         category: 'Electroplating Job Work',
-        summary: 'Commercial electroplating and surface treatment job work for industrial machinery parts and engineered metal components.',
+        summary: 'Commercial electroplating and electrolytic surface coating for industrial machinery parts and engineered metal components.',
         description: `
-Anant Metal Finishers provides industrial electroplating job-work solutions for engineering components and machined assemblies. Located in the industrial heart of MIDC Ambad, Nashik, our facility accommodates job-work batches based on component specifications.
+Anant Metal Finishers (AMF) provides industrial electroplating job-work solutions for engineering components and machined assemblies. Located in the industrial center of MIDC Ambad, Nashik, our facility accommodates job-work batches based on customer component specifications.
 
 ### Job-Work Assessment Process
-To enquiry about electroplating job work for your components:
 1. **Submit Component Details:** Provide material grade, surface condition, dimensions, and drawing requirements.
-2. **Review & Specification:** Our shop evaluates current bath capabilities and compatible surface treatment processes.
-3. **Sample Assessment & Commercials:** For continuous job work, sample trials can be reviewed to establish finishing standards.
+2. **Review & Specification:** Our workshop evaluates bath compatibility, rack configurations, and surface treatment processes.
+3. **Sample Assessment:** For regular production batches, sample evaluation helps confirm finish standards before mass processing.
 
-*Note: All coating types, bath parameters, and lead times are confirmed following physical or drawing inspection of components.*
+*Note: Specific bath parameters, tank sizes, and lead times are confirmed following physical or drawing inspection.*
         `,
-        mainImage: '', // Will use high-quality industrial fallback SVG/asset
-        gallery: [],
-        materials: ['Steel', 'Iron', 'Machined Components'],
-        technicalSpecs: [
-          { label: 'Service Category', value: 'Electroplating Job Work' },
-          { label: 'Facility Location', value: 'G-8, MIDC Ambad, Nashik' },
-          { label: 'Evaluation Basis', value: 'Component drawings & sample review' }
+        mainImage: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1200&q=80',
+        gallery: [
+          'https://images.unsplash.com/photo-1504917599217-d4dc5ebe6122?auto=format&fit=crop&w=1000&q=80',
+          'https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=1000&q=80'
         ],
-        availabilityNotes: 'Job-work capacity is scheduled on requirement review. Please share component drawings and batch quantities.',
-        seoTitle: 'Industrial Electroplating Job Work in Nashik | Anant Metal Finishers (AMP)',
-        seoDescription: 'Professional electroplating job work for industrial components at MIDC Ambad, Nashik. Share your component specifications for finishing review.',
+        materials: ['Mild Steel', 'Carbon Steel', 'Machined Castings', 'Turned Parts'],
+        technicalSpecs: [
+          { label: 'Primary Capability', value: 'Electroplating Job Work' },
+          { label: 'Facility Location', value: 'G-8, MIDC Ambad, Nashik' },
+          { label: 'Evaluation Basis', value: 'Component drawings & batch inspection' }
+        ],
+        availabilityNotes: 'Job-work capacity is scheduled upon specification review.',
+        seoTitle: 'Industrial Electroplating in Nashik | Anant Metal Finishers',
+        seoDescription: 'Professional electroplating job work for industrial components at G-8, MIDC Ambad, Nashik.',
         isVerified: true,
         isPublished: true,
         isFeatured: true,
         sortOrder: 1
-      });
-      logger.info('Verified service seeded: Industrial Electroplating Job Work');
+      },
+      {
+        name: 'Industrial Metal Finishing',
+        slug: 'industrial-metal-finishing',
+        itemType: 'service',
+        category: 'Metal Finishing',
+        summary: 'Surface preparation, descaling, cleaning, and protective metal finishing job work for industrial fabrications.',
+        description: `
+Metal finishing provides critical substrate protection against premature oxidation, environmental wear, and industrial corrosion. Our workshop in MIDC Ambad handles preparation, acid pickling, rinse cascades, and surface treatment according to engineering drawing specifications.
+
+### Process Highlights
+- Degreasing and industrial oil removal
+- Rust descaling and chemical preparation
+- Protective surface treatment
+- Careful component handling and protective packaging
+        `,
+        mainImage: 'https://images.unsplash.com/photo-1504917599217-d4dc5ebe6122?auto=format&fit=crop&w=1200&q=80',
+        gallery: [
+          'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1000&q=80'
+        ],
+        materials: ['Engineering Steels', 'Machined Components', 'Fasteners'],
+        technicalSpecs: [
+          { label: 'Category', value: 'Industrial Metal Finishing' },
+          { label: 'Workshop Zone', value: 'MIDC Ambad, Nashik' },
+          { label: 'Inspection', value: 'Visual & specification review' }
+        ],
+        availabilityNotes: 'Capacity scheduled on component specification review.',
+        seoTitle: 'Industrial Metal Finishing Nashik | Anant Metal Finishers',
+        seoDescription: 'Reliable industrial metal finishing and surface treatment job work in MIDC Ambad, Nashik.',
+        isVerified: true,
+        isPublished: true,
+        isFeatured: true,
+        sortOrder: 2
+      },
+      {
+        name: 'Industrial Surface Finishing',
+        slug: 'industrial-surface-finishing',
+        itemType: 'service',
+        category: 'Metal Finishing',
+        summary: 'Uniform surface treatment and conditioning for mechanical assemblies and custom component job work.',
+        description: `
+Industrial surface finishing enhances substrate durability and prepares metal surfaces for long-term engineering applications. We focus on consistent chemical immersion cycles, proper racking, and thorough rinse procedures for machined parts.
+        `,
+        mainImage: 'https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=1200&q=80',
+        gallery: [],
+        materials: ['Ferrous Components', 'Engineered Assemblies'],
+        technicalSpecs: [
+          { label: 'Service', value: 'Surface Finishing Job Work' },
+          { label: 'Workshop', value: 'G-8, MIDC Ambad, Nashik' }
+        ],
+        availabilityNotes: 'Batch production reviewed against customer drawings.',
+        seoTitle: 'Industrial Surface Finishing | Anant Metal Finishers',
+        seoDescription: 'High quality industrial surface treatment and finishing in MIDC Ambad, Nashik.',
+        isVerified: true,
+        isPublished: true,
+        isFeatured: true,
+        sortOrder: 3
+      },
+      {
+        name: 'Component Finishing Job Work',
+        slug: 'component-finishing-job-work',
+        itemType: 'service',
+        category: 'Metal Finishing',
+        summary: 'Precision finishing for automotive components, machine bushings, shafts, and hardware job work.',
+        description: `
+Dedicated job-work finishing for manufactured components, precision turned parts, machine bushings, and custom fittings. Our MIDC Ambad workshop accommodates regular component production batches with dependable turnaround.
+        `,
+        mainImage: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1200&q=80',
+        gallery: [],
+        materials: ['Bushings', 'Pins', 'Shafts', 'Turned Parts'],
+        technicalSpecs: [
+          { label: 'Category', value: 'Component Finishing' },
+          { label: 'Turnaround', value: 'Batch scheduling upon receipt' }
+        ],
+        availabilityNotes: 'Share part drawings for capacity scheduling.',
+        seoTitle: 'Component Finishing Job Work | Anant Metal Finishers Nashik',
+        seoDescription: 'Specialized component finishing job work for engineering manufacturers in Nashik.',
+        isVerified: true,
+        isPublished: true,
+        isFeatured: true,
+        sortOrder: 4
+      }
+    ];
+
+    for (const cap of initialCapabilities) {
+      const exists = await Product.findOne({ slug: cap.slug });
+      if (!exists) {
+        await Product.create(cap);
+        logger.info(`Capability seeded: ${cap.name}`);
+      } else {
+        exists.isVerified = true;
+        exists.isPublished = true;
+        if (!exists.mainImage) exists.mainImage = cap.mainImage;
+        await exists.save();
+      }
     }
 
-    // 4. Seed Unconfirmed Draft Services (Strict rule: treat zinc, barrel plating as unconfirmed until admin verifies!)
+    // 4. Seed Unconfirmed Draft Services (Strict factual integrity: unconfirmed until admin confirms)
     const draftServices = [
       {
         name: 'Zinc Plating Job Work (Unconfirmed Draft)',
@@ -112,10 +209,10 @@ To enquiry about electroplating job work for your components:
         itemType: 'service',
         category: 'Metal Finishing',
         summary: 'Awaiting administrator verification of active zinc bath capabilities and passivation chemistries.',
-        description: 'This is an unconfirmed service entry stored in draft state. It will not appear on the live website until the administrator verifies the active bath parameters, tank sizes, and passivate options.',
+        description: 'This is an unconfirmed service entry stored in draft state. It will not appear on the live website until the administrator verifies active bath parameters.',
         isVerified: false,
         isPublished: false,
-        sortOrder: 2
+        sortOrder: 5
       },
       {
         name: 'Barrel Plating Job Work (Unconfirmed Draft)',
@@ -126,7 +223,7 @@ To enquiry about electroplating job work for your components:
         description: 'This service listing is held in draft status. Verify barrel dimensions, load capacities, and compatible fasteners before publishing to live visitors.',
         isVerified: false,
         isPublished: false,
-        sortOrder: 3
+        sortOrder: 6
       }
     ];
 
@@ -170,7 +267,7 @@ To enquiry about electroplating job work for your components:
         category: 'Industrial Finishing Guides',
         tags: ['Electroplating', 'Manufacturing', 'Surface Finishing', 'Engineering'],
         readingTime: '5 min read',
-        seoTitle: 'Understanding Industrial Electroplating: Practical Guide | AMP',
+        seoTitle: 'Understanding Industrial Electroplating: Practical Guide | AMF',
         seoDescription: 'Learn the fundamentals of industrial electroplating, surface preparation, and quality factors for engineering components.',
         isPublished: true,
         publicationDate: new Date('2026-09-15')
@@ -202,7 +299,7 @@ To enquiry about electroplating job work for your components:
         category: 'Industrial Finishing Guides',
         tags: ['Job Work', 'Quality Control', 'Machining', 'Plating Checklist'],
         readingTime: '4 min read',
-        seoTitle: 'Checklist Before Sending Parts for Plating Job Work | AMP Nashik',
+        seoTitle: 'Checklist Before Sending Parts for Plating Job Work | AMF Nashik',
         seoDescription: 'Important considerations for engineering shops before sending machined parts for electroplating and metal finishing job work.',
         isPublished: true,
         publicationDate: new Date('2026-10-01')
@@ -243,6 +340,98 @@ To enquiry about electroplating job work for your components:
       }
     }
     logger.info('Educational blog guides seeded successfully');
+
+    // 6. Seed Corporate Gallery & Our Work Showcase
+    const galleryItems = [
+      {
+        title: 'Industrial Immersion Bath Line',
+        description: 'Multi-stage process tanks configured for degreasing, acid pickling, and electrolytic plating cycles at our MIDC Ambad workshop.',
+        category: 'Factory',
+        imageUrl: 'https://images.unsplash.com/photo-1581092160607-ee22621dd758?auto=format&fit=crop&w=1200&q=80',
+        isFeatured: true,
+        isWorkItem: true,
+        order: 1,
+        tags: ['Factory', 'Immersion Tanks', 'Processing Line']
+      },
+      {
+        title: 'Component Fixture & Material Handling',
+        description: 'Overhead hoisting equipment and custom copper racks designed for balanced current distribution and secure component mounting.',
+        category: 'Machinery',
+        imageUrl: 'https://images.unsplash.com/photo-1504917599217-d4dc5ebe6122?auto=format&fit=crop&w=1200&q=80',
+        isFeatured: true,
+        isWorkItem: true,
+        order: 2,
+        tags: ['Machinery', 'Material Handling', 'Racks']
+      },
+      {
+        title: 'Precision Machined Pin & Bushing Sets',
+        description: 'Turned engineering components prepared for protective surface treatment according to customer drawing tolerances.',
+        category: 'Components',
+        imageUrl: 'https://images.unsplash.com/photo-1581092335397-9583fe92d232?auto=format&fit=crop&w=1200&q=80',
+        isFeatured: true,
+        isWorkItem: true,
+        order: 3,
+        tags: ['Components', 'Machining', 'Pins', 'Bushings']
+      },
+      {
+        title: 'Finished Fasteners & Threaded Hardware',
+        description: 'Uniform protective coating achieved across complex fastener threads with zero thread clogging or binding defects.',
+        category: 'Finished Work',
+        imageUrl: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=1200&q=80',
+        isFeatured: true,
+        isWorkItem: true,
+        order: 4,
+        tags: ['Finished Work', 'Fasteners', 'Electroplating']
+      },
+      {
+        title: 'Finished Cylindrical Component Assemblies',
+        description: 'High aesthetic and corrosion-resistant surface finish on precision ground cylindrical machinery components.',
+        category: 'Finished Work',
+        imageUrl: 'https://images.unsplash.com/photo-1616401784845-180882ba9ba8?auto=format&fit=crop&w=1200&q=80',
+        isFeatured: true,
+        isWorkItem: true,
+        order: 5,
+        tags: ['Finished Work', 'Components', 'Metal Finishing']
+      },
+      {
+        title: 'Plot G-8, MIDC Ambad Industrial Area',
+        description: 'Strategic manufacturing location in Nashik offering easy logistics access for regional engineering suppliers.',
+        category: 'Exterior',
+        imageUrl: 'https://images.unsplash.com/photo-1587293852726-70cdb56c2866?auto=format&fit=crop&w=1200&q=80',
+        isFeatured: true,
+        isWorkItem: false,
+        order: 6,
+        tags: ['Exterior', 'Nashik', 'MIDC Ambad']
+      },
+      {
+        title: 'Pre-Treatment Descaling & Chemical Degreasing',
+        description: 'Essential pre-plating surface cleaning removing all drawing lubricants, rolling scale, and microscopic oxides.',
+        category: 'Factory',
+        imageUrl: 'https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?auto=format&fit=crop&w=1200&q=80',
+        isFeatured: true,
+        isWorkItem: true,
+        order: 7,
+        tags: ['Factory', 'Pre-Treatment', 'Cleaning']
+      },
+      {
+        title: 'Batch Dispatch & Component Staging Area',
+        description: 'Careful component separation and protective packaging safeguarding finished metal surfaces during transit.',
+        category: 'Company',
+        imageUrl: 'https://images.unsplash.com/photo-1581092580497-e0d23cbdf1dc?auto=format&fit=crop&w=1200&q=80',
+        isFeatured: true,
+        isWorkItem: false,
+        order: 8,
+        tags: ['Company', 'Dispatch', 'Inspection']
+      }
+    ];
+
+    for (const item of galleryItems) {
+      const exists = await Gallery.findOne({ title: item.title });
+      if (!exists) {
+        await Gallery.create(item);
+      }
+    }
+    logger.info('Corporate gallery & our work items seeded successfully');
 
     logger.info('Database seeding completed with factual verification rules intact!');
     await mongoose.disconnect();

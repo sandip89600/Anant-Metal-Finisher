@@ -7,6 +7,7 @@ const blogRoutes = require('./blogRoutes');
 const enquiryRoutes = require('./enquiryRoutes');
 const settingsRoutes = require('./settingsRoutes');
 const adminRoutes = require('./adminRoutes');
+const galleryRoutes = require('./galleryRoutes');
 const { getCategories } = require('../controllers/productController');
 const { submitContact, submitQuote } = require('../controllers/enquiryController');
 const { submissionLimiter } = require('../middleware/rateLimiter');
@@ -20,7 +21,7 @@ router.get('/health', (req, res) => {
     timestamp: new Date().toISOString(),
     uptime: process.uptime(),
     company: 'Anant Metal Finishers',
-    brand: 'AMP',
+    brand: 'AMF',
     location: 'MIDC Ambad, Nashik, Maharashtra'
   });
 });
@@ -37,6 +38,9 @@ router.post('/quotes', submissionLimiter, validate(quoteEnquirySchema), submitQu
 // Main sub-routers
 router.use('/auth', authRoutes);
 router.use('/products', productRoutes);
+router.use('/capabilities', productRoutes); // Capability showcase alias
+router.use('/gallery', galleryRoutes); // Gallery and Our Work portfolio
+router.use('/work', galleryRoutes); // Alias for work portfolio
 router.use('/blog', blogRoutes);
 router.use('/enquiries', enquiryRoutes);
 router.use('/settings', settingsRoutes);

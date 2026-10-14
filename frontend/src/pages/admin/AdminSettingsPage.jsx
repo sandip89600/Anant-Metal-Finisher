@@ -27,7 +27,7 @@ const AdminSettingsPage = () => {
   // Settings State
   const [settings, setSettings] = useState({
     companyName: 'Anant Metal Finishers',
-    brandAbbreviation: 'AMP',
+    brandAbbreviation: 'AMF',
     businessCategory: 'Industrial metal finishing and electroplating job work',
     locationAddress: {
       street: 'G-8, MIDC Ambad',

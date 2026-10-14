@@ -6,7 +6,7 @@ const env = {
   MONGODB_URI: process.env.MONGODB_URI || 'mongodb://127.0.0.1:27017/anant_metal_finishers',
   JWT_SECRET: process.env.JWT_SECRET || 'anant_metal_finishers_super_secure_jwt_secret_2026',
   JWT_EXPIRES_IN: process.env.JWT_EXPIRES_IN || '7d',
-  COOKIE_SECRET: process.env.COOKIE_SECRET || 'amp_cookie_secret_key_2026',
+  COOKIE_SECRET: process.env.COOKIE_SECRET || 'amf_cookie_secret_key_2026',
   FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:5173',
   ALLOWED_ORIGINS: process.env.ALLOWED_ORIGINS 
     ? process.env.ALLOWED_ORIGINS.split(',').map(o => o.trim())

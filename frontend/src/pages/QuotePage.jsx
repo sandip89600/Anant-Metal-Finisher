@@ -73,7 +73,7 @@ const QuotePage = () => {
   return (
     <>
       <SEO
-        title="Request a Job-Work Quote | Anant Metal Finishers (AMP) Nashik"
+        title="Request a Job-Work Quote | Anant Metal Finishers (AMF) Nashik"
         description="Submit your industrial component specifications for electroplating job work review. Receive a factual feasibility assessment from our MIDC Ambad workshop."
       />
 

@@ -1,6 +1,7 @@
 const Product = require('../models/Product');
 const Blog = require('../models/Blog');
 const Enquiry = require('../models/Enquiry');
+const Gallery = require('../models/Gallery');
 
 const getDashboardMetrics = async (req, res, next) => {
   try {
@@ -13,6 +14,10 @@ const getDashboardMetrics = async (req, res, next) => {
       inProgressEnquiries,
       completedEnquiries,
       totalEnquiries,
+      unreadEnquiries,
+      readEnquiries,
+      totalGallery,
+      featuredGallery,
       recentEnquiries,
       recentProducts,
       recentBlogs
@@ -25,6 +30,10 @@ const getDashboardMetrics = async (req, res, next) => {
       Enquiry.countDocuments({ status: 'in_progress' }),
       Enquiry.countDocuments({ status: 'completed' }),
       Enquiry.countDocuments(),
+      Enquiry.countDocuments({ isRead: false }),
+      Enquiry.countDocuments({ isRead: true }),
+      Gallery.countDocuments(),
+      Gallery.countDocuments({ isFeatured: true }),
       Enquiry.find().sort({ createdAt: -1 }).limit(5).lean(),
       Product.find().sort({ createdAt: -1 }).limit(4).select('name slug category isPublished isVerified').lean(),
       Blog.find().sort({ createdAt: -1 }).limit(4).select('title slug isPublished publicationDate').lean()
@@ -73,7 +82,13 @@ const getDashboardMetrics = async (req, res, next) => {
           new: newEnquiries,
           inProgress: inProgressEnquiries,
           completed: completedEnquiries,
-          total: totalEnquiries
+          total: totalEnquiries,
+          unread: unreadEnquiries,
+          read: readEnquiries
+        },
+        gallery: {
+          total: totalGallery,
+          featured: featuredGallery
         },
         recentEnquiries,
         recentProducts,

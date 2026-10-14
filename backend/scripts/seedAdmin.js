@@ -10,8 +10,8 @@ async function seedAdmin() {
     logger.info('Connected to MongoDB for admin setup');
 
     const adminEmail = process.env.INITIAL_ADMIN_EMAIL || 'admin@anantmetalfinishers.com';
-    const adminPassword = process.env.INITIAL_ADMIN_PASSWORD || 'AmpNashik@2026AdminSecure!';
-    const adminName = process.env.INITIAL_ADMIN_NAME || 'AMP Operations Desk';
+    const adminPassword = process.env.INITIAL_ADMIN_PASSWORD || 'AmfNashik@2026AdminSecure!';
+    const adminName = process.env.INITIAL_ADMIN_NAME || 'AMF Operations Desk';
 
     let admin = await Admin.findOne({ email: adminEmail.toLowerCase() });
 
@@ -36,7 +36,7 @@ async function seedAdmin() {
     }
 
     console.log('\n======================================================');
-    console.log('  ANANT METAL FINISHERS (AMP) - ADMIN INITIALIZATION  ');
+    console.log('  ANANT METAL FINISHERS (AMF) - ADMIN INITIALIZATION  ');
     console.log('======================================================');
     console.log(`  Email:    ${adminEmail}`);
     console.log(`  Role:     superadmin`);

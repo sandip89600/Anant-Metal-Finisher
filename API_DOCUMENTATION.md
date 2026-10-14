@@ -1,4 +1,4 @@
-# Anant Metal Finishers (AMP) - API Documentation & Testing Guide
+# Anant Metal Finishers (AMF) - API Documentation & Testing Guide
 
 Base URL: `http://localhost:5000/api/v1`  
 Production URL: `https://api.anantmetalfinishers.com/api/v1`
@@ -18,7 +18,7 @@ Production URL: `https://api.anantmetalfinishers.com/api/v1`
   "timestamp": "2026-10-14T08:00:00.000Z",
   "uptime": 124.5,
   "company": "Anant Metal Finishers",
-  "brand": "AMP",
+  "brand": "AMF",
   "location": "MIDC Ambad, Nashik, Maharashtra"
 }
 ```
@@ -33,7 +33,7 @@ Production URL: `https://api.anantmetalfinishers.com/api/v1`
   "success": true,
   "data": {
     "companyName": "Anant Metal Finishers",
-    "brandAbbreviation": "AMP",
+    "brandAbbreviation": "AMF",
     "businessCategory": "Industrial metal finishing and electroplating job work",
     "locationAddress": {
       "street": "G-8, MIDC Ambad",
@@ -130,7 +130,7 @@ Production URL: `https://api.anantmetalfinishers.com/api/v1`
 {
   "success": true,
   "message": "Your enquiry has been received successfully. Our team will review your requirements.",
-  "referenceNumber": "AMP-ENQ-2026-A1B2C3456",
+  "referenceNumber": "AMF-ENQ-2026-A1B2C3456",
   "createdAt": "2026-10-14T08:05:00.000Z"
 }
 ```
@@ -162,7 +162,7 @@ Production URL: `https://api.anantmetalfinishers.com/api/v1`
 {
   "success": true,
   "message": "Your request for quote has been submitted. Our technical team will review your component specifications.",
-  "referenceNumber": "AMP-QUO-2026-D4E5F7890",
+  "referenceNumber": "AMF-QUO-2026-D4E5F7890",
   "createdAt": "2026-10-14T08:06:00.000Z"
 }
 ```
@@ -181,18 +181,18 @@ Production URL: `https://api.anantmetalfinishers.com/api/v1`
   "password": "YourSecurePassword"
 }
 ```
-- **Response:** Sets HttpOnly cookie `amp_token` and returns token + user profile.
+- **Response:** Sets HttpOnly cookie `amf_token` and returns token + user profile.
 
 ### Current Admin Profile
 - **Endpoint:** `GET /api/v1/auth/me`
-- **Headers:** Cookie `amp_token` or `Authorization: Bearer <token>`
+- **Headers:** Cookie `amf_token` or `Authorization: Bearer <token>`
 - **Response:**
 ```json
 {
   "success": true,
   "user": {
     "id": "670c...",
-    "name": "AMP Operations Desk",
+    "name": "AMF Operations Desk",
     "email": "admin@anantmetalfinishers.com",
     "role": "superadmin"
   }
@@ -201,7 +201,7 @@ Production URL: `https://api.anantmetalfinishers.com/api/v1`
 
 ### Admin Logout
 - **Endpoint:** `POST /api/v1/auth/logout`
-- **Response:** Clears HttpOnly cookie `amp_token`.
+- **Response:** Clears HttpOnly cookie `amf_token`.
 
 ---
 
@@ -220,15 +220,23 @@ Requires valid JWT via HttpOnly cookie or Bearer token header.
 - `PATCH /api/v1/admin/products/:id` — Update service / toggle verification.
 - `DELETE /api/v1/admin/products/:id` — Delete service.
 
-### Enquiry & Quotation Management
-- `GET /api/v1/admin/enquiries` — Filter by `status` (`new`, `in_progress`, `completed`, `spam`), `type` (`quote`, `contact`), or search text.
+### Enquiry & Quotation / Message Management
+- `GET /api/v1/admin/enquiries` — Filter by `status` (`new`, `in_progress`, `completed`, `spam`), `type` (`quote`, `contact`), `isRead` (`all`, `true`, `false`), or search text. Returns unread/read totals.
 - `GET /api/v1/admin/enquiries/export` — Stream filtered enquiries directly as a standard RFC-4180 CSV spreadsheet.
 - `GET /api/v1/admin/enquiries/:id` — View details with internal notes.
 - `PATCH /api/v1/admin/enquiries/:id/status` — Update status.
+- `PATCH /api/v1/admin/enquiries/:id/read` — Toggle or set message read/unread state.
+- `DELETE /api/v1/admin/enquiries/:id` — Permanently delete message with confirmation.
 - `POST /api/v1/admin/enquiries/:id/notes` — Add internal note.
 
+### Corporate Photo Gallery & Portfolio Management
+- `GET /api/v1/admin/gallery` — View all photos, filter by category or featured status.
+- `POST /api/v1/admin/gallery` — Add photograph entry with category, image URL, and work portfolio flag.
+- `PATCH /api/v1/admin/gallery/:id` — Edit photo details or toggle portfolio display.
+- `DELETE /api/v1/admin/gallery/:id` — Delete photograph entry.
+
 ### Company Settings Management
-- `GET /api/v1/admin/settings` — Returns full editable company configuration.
+- `GET /api/v1/admin/settings` — Returns full editable company configuration including leadership, media URLs, and verified capabilities.
 - `PATCH /api/v1/admin/settings` — Update company settings.
 
 ---

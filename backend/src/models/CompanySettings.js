@@ -9,7 +9,22 @@ const companySettingsSchema = new mongoose.Schema(
     },
     brandAbbreviation: {
       type: String,
-      default: 'AMP',
+      default: 'AMF',
+      trim: true
+    },
+    logoUrl: {
+      type: String,
+      default: '',
+      trim: true
+    },
+    tagline: {
+      type: String,
+      default: 'Industrial Metal Finishing & Electroplating',
+      trim: true
+    },
+    heroDescription: {
+      type: String,
+      default: 'An industrial finishing company based in MIDC Ambad, Nashik, focused on metal finishing and electroplating capabilities.',
       trim: true
     },
     businessCategory: {
@@ -56,7 +71,7 @@ const companySettingsSchema = new mongoose.Schema(
     },
     aboutStory: {
       type: String,
-      default: 'Anant Metal Finishers (AMP) operates an industrial metal finishing and electroplating job-work facility in MIDC Ambad, Nashik, Maharashtra. We deliver dependable job-work solutions for industrial engineering manufacturers, machinery component suppliers, and precision jobbing shops.',
+      default: 'Anant Metal Finishers (AMF) operates an industrial metal finishing and electroplating job-work facility in MIDC Ambad, Nashik, Maharashtra. We deliver dependable job-work solutions for industrial engineering manufacturers, machinery component suppliers, and precision jobbing shops.',
       trim: true
     },
     mission: {
@@ -78,6 +93,30 @@ const companySettingsSchema = new mongoose.Schema(
       default: 'https://maps.google.com/?q=G-8,+MIDC+Ambad,+Nashik,+Maharashtra+422010',
       trim: true
     },
+    companySignboardUrl: {
+      type: String,
+      default: '',
+      trim: true
+    },
+    companyExteriorUrl: {
+      type: String,
+      default: '',
+      trim: true
+    },
+    companyFacilityUrl: {
+      type: String,
+      default: '',
+      trim: true
+    },
+    leadership: [
+      {
+        name: { type: String, trim: true, default: '' },
+        designation: { type: String, trim: true, default: '' },
+        bio: { type: String, trim: true, default: '' },
+        photoUrl: { type: String, trim: true, default: '' },
+        isVerified: { type: Boolean, default: false }
+      }
+    ],
     socialLinks: {
       linkedin: { type: String, default: '', trim: true },
       facebook: { type: String, default: '', trim: true },
@@ -87,12 +126,12 @@ const companySettingsSchema = new mongoose.Schema(
     seoDefaults: {
       metaTitle: {
         type: String,
-        default: 'Anant Metal Finishers (AMP) | Electroplating Job Work | MIDC Ambad, Nashik',
+        default: 'Anant Metal Finishers (AMF) | Electroplating Job Work | MIDC Ambad, Nashik',
         trim: true
       },
       metaDescription: {
         type: String,
-        default: 'Anant Metal Finishers (AMP) provides industrial electroplating and metal finishing job work in MIDC Ambad, Nashik, Maharashtra. Discuss your finishing specifications and request a quote.',
+        default: 'Anant Metal Finishers (AMF) provides industrial electroplating and metal finishing job work in MIDC Ambad, Nashik, Maharashtra. Discuss your finishing specifications and request a quote.',
         trim: true
       }
     }

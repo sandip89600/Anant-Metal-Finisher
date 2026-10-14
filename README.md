@@ -1,6 +1,6 @@
-# Anant Metal Finishers (AMP) - Industrial Web Application
+# Anant Metal Finishers (AMF) - Industrial Web Application
 
-A production-ready full-stack industrial web portal and management system for **Anant Metal Finishers (AMP)**, situated in **G-8, MIDC Ambad, Nashik, Maharashtra, India – 422010**.
+A production-ready full-stack industrial web portal and management system for **Anant Metal Finishers (AMF)**, situated in **G-8, MIDC Ambad, Nashik, Maharashtra, India – 422010**.
 
 Built with **React.js**, **Vite**, **Tailwind CSS**, **Node.js**, **Express.js**, and **MongoDB / Mongoose**.
 
@@ -9,7 +9,7 @@ Built with **React.js**, **Vite**, **Tailwind CSS**, **Node.js**, **Express.js**
 ## 1. Project Overview & Business Focus
 
 - **Company Name:** Anant Metal Finishers
-- **Brand Abbreviation:** AMP
+- **Brand Abbreviation:** AMF
 - **Business Category:** Industrial metal finishing and electroplating job work
 - **Workshop Location:** Plot G-8, MIDC Ambad, Nashik, Maharashtra, India – 422010
 - **Target Audience:** Industrial manufacturers, engineering jobbing shops, component suppliers, and procurement teams looking for surface finishing job work.
@@ -128,7 +128,7 @@ ALLOWED_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
 # Initial Admin Creation credentials
 INITIAL_ADMIN_EMAIL=admin@anantmetalfinishers.com
 INITIAL_ADMIN_PASSWORD=AmpNashik@2026AdminSecure!
-INITIAL_ADMIN_NAME=AMP Operations Desk
+INITIAL_ADMIN_NAME=AMF Operations Desk
 ```
 
 **Frontend (`frontend/.env`):**
@@ -218,7 +218,7 @@ npm run build
 - **Cross-Site Scripting Protection:** All blog HTML is sanitized with `sanitize-html` before database persistence.
 - **Rate Limiting:** Protects sensitive login and public enquiry submission endpoints from brute-force and spam abuse.
 - **Anti-Duplication:** Contact and quotation submissions reject duplicate payloads submitted within 2 minutes.
-- **Reference Numbers:** Every enquiry generates a unique audit code (`AMP-ENQ-2026-XXXXX` or `AMP-QUO-2026-XXXXX`).
+- **Reference Numbers:** Every enquiry generates a unique audit code (`AMF-ENQ-2026-XXXXX` or `AMF-QUO-2026-XXXXX`).
 
 ---
 

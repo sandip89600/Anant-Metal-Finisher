@@ -147,7 +147,7 @@ const ProductDetailPage = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center gap-2">
           <Link to="/" className="hover:text-blue-700">Home</Link>
           <span>/</span>
-          <Link to="/products" className="hover:text-blue-700">Products &amp; Services</Link>
+          <Link to="/capabilities" className="hover:text-blue-700">Capabilities</Link>
           <span>/</span>
           <span className="text-slate-900 font-semibold">{item.name}</span>
         </div>

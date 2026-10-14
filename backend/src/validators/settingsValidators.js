@@ -17,10 +17,23 @@ const companySettingsSchema = z.object({
   contactNotificationEmail: z.string().email().or(z.literal('')).optional(),
   workingHours: z.string().max(100).optional(),
   gstNumber: z.string().max(50).optional(),
+  logoUrl: z.string().max(500).optional(),
+  tagline: z.string().max(200).optional(),
+  heroDescription: z.string().max(1000).optional(),
   aboutStory: z.string().max(2000).optional(),
   mission: z.string().max(1000).optional(),
   values: z.string().max(1000).optional(),
   verifiedCapabilities: z.array(z.string()).optional(),
+  companySignboardUrl: z.string().max(500).optional(),
+  companyExteriorUrl: z.string().max(500).optional(),
+  companyFacilityUrl: z.string().max(500).optional(),
+  leadership: z.array(z.object({
+    name: z.string().max(100).optional(),
+    designation: z.string().max(100).optional(),
+    bio: z.string().max(500).optional(),
+    photoUrl: z.string().max(500).optional(),
+    isVerified: z.boolean().optional()
+  })).optional(),
   googleMapsUrl: z.string().max(500).optional(),
   socialLinks: z.object({
     linkedin: z.string().max(200).optional(),

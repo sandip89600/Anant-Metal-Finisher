@@ -42,7 +42,7 @@ const Footer = () => {
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-700 to-sky-500 flex items-center justify-center text-white font-extrabold text-lg shadow-sm border border-slate-700">
-                AMP
+                AMF
               </div>
               <div>
                 <span className="block font-bold text-white text-base leading-tight">
@@ -92,10 +92,10 @@ const Footer = () => {
             )}
           </div>
 
-          {/* Column 2: Quick Links */}
+          {/* Column 2: Company */}
           <div>
             <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4 border-l-2 border-sky-500 pl-2.5">
-              Quick Links
+              Company
             </h3>
             <ul className="space-y-2.5 text-sm">
               <li>
@@ -105,43 +105,48 @@ const Footer = () => {
               </li>
               <li>
                 <Link to="/about" className="text-slate-400 hover:text-white transition-colors">
-                  About Us
+                  About
                 </Link>
               </li>
               <li>
-                <Link to="/products" className="text-slate-400 hover:text-white transition-colors">
-                  Products & Services
+                <Link to="/capabilities" className="text-slate-400 hover:text-white transition-colors">
+                  Capabilities
+                </Link>
+              </li>
+              <li>
+                <Link to="/our-work" className="text-slate-400 hover:text-white transition-colors">
+                  Our Work
+                </Link>
+              </li>
+              <li>
+                <Link to="/gallery" className="text-slate-400 hover:text-white transition-colors">
+                  Gallery
                 </Link>
               </li>
               <li>
                 <Link to="/blog" className="text-slate-400 hover:text-white transition-colors">
-                  Technical Blog & Guides
+                  Blog
                 </Link>
               </li>
               <li>
                 <Link to="/contact" className="text-slate-400 hover:text-white transition-colors">
-                  Contact Us
-                </Link>
-              </li>
-              <li>
-                <Link to="/quote" className="text-sky-400 hover:text-sky-300 font-medium transition-colors">
-                  Request a Quote →
+                  Contact
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Column 3: Verified Services Only */}
+          {/* Column 3: Business */}
           <div>
             <h3 className="text-sm font-semibold text-white uppercase tracking-wider mb-4 border-l-2 border-sky-500 pl-2.5">
-              Verified Capabilities
+              Business
             </h3>
             <ul className="space-y-2.5 text-sm">
               {verifiedServices.length > 0 ? (
                 verifiedServices.map((service) => (
                   <li key={service.slug}>
                     <Link
-                      to={`/products/${service.slug}`}
+                      to={`/capabilities/${service.slug}`}
                       className="text-slate-400 hover:text-white transition-colors block"
                     >
                       {service.name}
@@ -149,9 +154,11 @@ const Footer = () => {
                   </li>
                 ))
               ) : (
-                <li className="text-slate-500 text-xs">
-                  Electroplating Job Work (Subject to component review)
-                </li>
+                <>
+                  <li className="text-slate-400">Metal Finishing</li>
+                  <li className="text-slate-400">Electroplating</li>
+                  <li className="text-slate-400">Industrial Surface Finishing</li>
+                </>
               )}
             </ul>
             <div className="mt-4 p-3 rounded-lg bg-slate-800/60 border border-slate-700/60 text-xs text-slate-400 leading-relaxed">
@@ -216,7 +223,7 @@ const Footer = () => {
       {/* Bottom Bar */}
       <div className="border-t border-slate-800 bg-slate-950 py-4 px-4 sm:px-6 lg:px-8 text-xs text-slate-500">
         <div className="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-3">
-          <p>© {currentYear} Anant Metal Finishers (AMP). All rights reserved.</p>
+          <p>© {currentYear} Anant Metal Finishers (AMF). All rights reserved.</p>
           <div className="flex items-center gap-6">
             <Link to="/privacy-policy" className="hover:text-slate-300 transition-colors">
               Privacy Policy
@@ -225,7 +232,7 @@ const Footer = () => {
               Terms & Conditions
             </Link>
             <Link to="/admin/login" className="hover:text-slate-300 transition-colors">
-              Staff Login
+              Admin Login
             </Link>
           </div>
         </div>

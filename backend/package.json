@@ -1,7 +1,7 @@
 {
   "name": "anant-metal-finishers-backend",
   "version": "1.0.0",
-  "description": "Production-ready backend API for Anant Metal Finishers (AMP)",
+  "description": "Production-ready backend API for Anant Metal Finishers (AMF)",
   "main": "src/server.js",
   "type": "commonjs",
   "scripts": {
@@ -14,7 +14,7 @@
   "keywords": [
     "metal-finishing",
     "electroplating",
-    "amp",
+    "amf",
     "nashik",
     "express",
     "mongodb"

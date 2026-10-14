@@ -13,7 +13,7 @@ const generateToken = (id) => {
 // Set secure HttpOnly cookie helper
 const setAuthCookie = (res, token) => {
   const isProduction = env.NODE_ENV === 'production';
-  res.cookie('amp_token', token, {
+  res.cookie('amf_token', token, {
     httpOnly: true,
     secure: isProduction,
     sameSite: isProduction ? 'none' : 'lax',
@@ -76,11 +76,13 @@ const login = async (req, res, next) => {
 
 const logout = async (req, res) => {
   const isProduction = env.NODE_ENV === 'production';
-  res.clearCookie('amp_token', {
+  const cookieOptions = {
     httpOnly: true,
     secure: isProduction,
     sameSite: isProduction ? 'none' : 'lax'
-  });
+  };
+  res.clearCookie('amf_token', cookieOptions);
+  res.clearCookie('amp_token', cookieOptions);
 
   res.status(200).json({
     success: true,

@@ -8,8 +8,8 @@ const authenticateAdmin = async (req, res, next) => {
     let token = null;
 
     // First check HttpOnly cookie
-    if (req.cookies && req.cookies.amp_token) {
-      token = req.cookies.amp_token;
+    if (req.cookies && (req.cookies.amf_token || req.cookies.amp_token)) {
+      token = req.cookies.amf_token || req.cookies.amp_token;
     } 
     // Fallback to Bearer token in Authorization header
     else if (req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
